@@ -1,0 +1,173 @@
+\clearpage
+\section{Giới thiệu}
+\subsection{Động cơ của đề tài}
+Trong bối cảnh toàn cầu hóa và đô thị hóa diễn ra mạnh mẽ, Thành phố Hồ Chí Minh (TP.HCM) với vai trò là trung tâm kinh tế lớn nhất Việt Nam đang đối mặt với nhiều thách thức về quản lý đô thị, trong đó vấn đề giao thông là một trong những bài toán nan giải nhất. Theo báo cáo từ Sở Giao thông Vận tải TP.HCM năm 2023, trung bình mỗi ngày thành phố ghi nhận hơn 1.000 vụ ùn tắc giao thông cục bộ với khoảng 1,5 triệu ô tô và hơn 8 triệu xe máy lưu thông trong giờ cao điểm. Tình trạng này không chỉ gây áp lực khổng lồ lên hạ tầng giao thông vốn đã quá tải mà còn tạo ra những hệ lụy nghiêm trọng về kinh tế - xã hội.
+
+Về mặt kinh tế, ùn tắc giao thông làm tăng chi phí logistics, gây chậm trễ trong vận chuyển hàng hóa và giảm năng suất lao động do người lao động mất nhiều thời gian di chuyển. Về mặt xã hội, nó ảnh hưởng trực tiếp đến chất lượng cuộc sống của người dân thông qua việc tăng thời gian đi lại, gây căng thẳng tâm lý, và làm gia tăng ô nhiễm không khí do phương tiện phải hoạt động với hiệu suất thấp trong trạng thái dừng - chạy liên tục.
+
+Một đặc điểm quan trọng nhưng thường bị bỏ qua trong bài toán giao thông đô thị là \textbf{hiện tượng lan truyền tắc nghẽn} (cascading congestion). Khi một nút giao thông quan trọng bị tắc nghẽn, nó không chỉ gây ảnh hưởng cục bộ mà còn tạo ra hiệu ứng dây chuyền lan rộng đến các nút giao thông lân cận và xa hơn trong mạng lưới. Hiện tượng này diễn ra do các tuyến đường trong đô thị có mối liên hệ chặt chẽ với nhau: dòng xe từ nút A sẽ di chuyển đến nút B, rồi tiếp tục đến nút C, tạo thành một chuỗi phụ thuộc phức tạp. Việc hiểu rõ và định lượng được các mối liên hệ này là then chốt để có thể dự báo, cảnh báo sớm và đưa ra giải pháp điều phối giao thông hiệu quả.
+
+Tuy nhiên, qua quan sát thực tế tại TP.HCM, nhóm nghiên cứu nhận thấy rằng phần lớn hoạt động điều phối và giảm ùn tắc giao thông hiện nay vẫn mang tính \textbf{phản ứng thụ động} hơn là \textbf{dự báo chủ động}. Các cơ quan chức năng thường chỉ vào cuộc xử lý khi đã nhận được tin báo về tình trạng mất trật tự hoặc dựa vào kinh nghiệm về những đoạn đường thường xuyên xảy ra tắc nghẽn. Điều này cho thấy mặc dù đã có các hệ thống giám sát và thu thập dữ liệu giao thông như UTraffic, nhưng dữ liệu này chưa được khai thác và phân tích một cách tối ưu để chuyển hóa thành các thông tin hữu ích phục vụ công tác dự báo và ra quyết định.
+
+Chính từ những nhận định trên, nhóm nghiên cứu quyết định hướng đến giải pháp \textbf{phân tích mối liên hệ về tình trạng giao thông giữa các nút giao thông quan trọng tại TP.HCM}. % Giải pháp này được xây dựng dựa trên nền tảng hệ thống UTraffic - một hệ thống giám sát và thu thập dữ liệu giao thông đô thị hiện có tại TP.HCM. UTraffic được lựa chọn vì những lý do sau:
+
+% \begin{itemize}
+    % \item Hệ thống đã có sẵn cơ sở hạ tầng thu thập dữ liệu thời gian thực từ các camera và cảm biến tại nhiều điểm trên địa bàn thành phố.
+    % \item Dữ liệu được cung cấp miễn phí và cho phép rút trích phục vụ mục đích nghiên cứu.
+    % \item Bản thân UTraffic được xây dựng với định hướng phát triển các tính năng dự báo và phân tích giao thông thông minh.
+% \end{itemize}
+
+Với việc tích hợp các phương pháp phân tích hiện đại như Graph Neural Networks (GNN), phân tích chuỗi thời gian, và các kỹ thuật Big Data, đề tài hướng đến mục tiêu xây dựng một hệ thống có khả năng:
+
+\begin{itemize}
+    \item Phát hiện và định lượng mối tương quan giữa các nút giao thông trong mạng lưới đô thị.
+    \item Xác định các mối quan hệ nhân quả (causal relationships) để biết nút giao nào là nguồn gốc gây ra tắc nghẽn lan truyền.
+    \item Cảnh báo sớm khi phát hiện nguy cơ lan truyền tắc nghẽn từ một nút sang các nút khác.
+    \item Cung cấp công cụ trực quan hóa giúp các nhà quản lý giao thông có cái nhìn toàn cảnh về mạng lưới giao thông.
+\end{itemize}
+
+Đây là một hướng tiếp cận mang tính chiến lược và lâu dài, góp phần chuyển đổi công tác quản lý giao thông từ mô hình phản ứng sang mô hình chủ động dựa trên dữ liệu và trí tuệ nhân tạo, từ đó cải thiện chất lượng cuộc sống của người dân TP.HCM.
+
+\newpage
+\subsection{Mục tiêu}
+Mục tiêu tổng quát của đề tài là nghiên cứu và phát triển giải pháp phân tích mối liên hệ về tình trạng giao thông tại các nút giao thông quan trọng ở TP.HCM dựa trên dữ liệu thực tế, từ đó cung cấp cơ sở khoa học cho công tác dự báo, cảnh báo sớm và ra quyết định trong quản lý giao thông đô thị. Cụ thể, đề tài hướng đến các mục tiêu sau:
+
+\begin{itemize}
+    \item \textbf{Khảo sát và đánh giá các giải pháp hiện có:} Tổng hợp, phân tích các nghiên cứu và giải pháp phân tích, dự báo giao thông đang được áp dụng trong và ngoài nước. Từ đó xác định phương pháp phù hợp với điều kiện thực tế tại TP.HCM, đặc biệt là bối cảnh giao thông hỗn hợp với mật độ xe máy cao.
+    
+    \item \textbf{Phát triển mô hình phân tích mối quan hệ không gian - thời gian:} Xây dựng mô hình có khả năng học và định lượng mối tương quan giữa các nút giao thông trong mạng lưới đô thị. Mô hình cần phát hiện được các cặp nút có độ ảnh hưởng cao lẫn nhau, xác định độ trễ lan truyền (propagation delay), và nhận diện các nút giao thông đóng vai trò quan trọng (hub nodes) trong việc gây ra hoặc kiểm soát tắc nghẽn.
+    
+    \item \textbf{Xây dựng hệ thống phân tích và cảnh báo:} Phát triển một hệ thống demo tích hợp vào UTraffic với các chức năng:
+    \begin{itemize}
+        \item Thu thập và xử lý dữ liệu giao thông thời gian thực.
+        \item Phân tích và trực quan hóa mối liên hệ giữa các nút giao thông trên bản đồ.
+        \item Cảnh báo sớm khi phát hiện nguy cơ lan truyền tắc nghẽn.
+        \item Cung cấp báo cáo phân tích hỗ trợ ra quyết định.
+    \end{itemize}
+    
+    \item \textbf{Đánh giá hiệu quả trên dữ liệu thực tế:} Kiểm chứng tính khả thi, độ chính xác và hiệu năng của giải pháp đề xuất thông qua việc thử nghiệm trên dữ liệu giao thông thực tế của TP.HCM thu thập từ hệ thống UTraffic.
+\end{itemize}
+
+Với những mục tiêu trên, đồ án không chỉ giải quyết vấn đề cụ thể về phân tích giao thông tại TP.HCM mà còn đóng góp vào việc phát triển hệ thống quản lý giao thông thông minh (Intelligent Transportation System - ITS) trong tương lai.
+
+\newpage
+\subsection{Phạm vi}
+Để đảm bảo tính khả thi và hiệu quả trong thời gian thực hiện đồ án, nghiên cứu được giới hạn trong các phạm vi sau:
+
+\subsubsection{Phạm vi không gian}
+Đề tài tập trung vào \textbf{các nút giao thông trọng điểm tại khu vực trung tâm TP.HCM}, bao gồm các quận có mật độ giao thông cao và thường xuyên xảy ra tắc nghẽn như Quận 1, Quận 3, Quận 5, Quận 10, và một số tuyến đường huyết mạch nối liền các khu vực này. Cụ thể:
+
+\begin{itemize}
+    \item Số lượng nút giao thông nghiên cứu: 15-25 nút giao thông quan trọng.
+    \item Tiêu chí lựa chọn: Các nút có lưu lượng phương tiện cao, thường xuyên xảy ra ùn tắc, hoặc có vị trí chiến lược (cổng vào/ra khu vực trung tâm, giao lộ lớn).
+    \item Các tuyến đường chính được xem xét bao gồm: đường Võ Văn Kiệt, đường Cách Mạng Tháng Tám, đường Điện Biên Phủ, đường Nguyễn Thị Minh Khai, và các trục đường nối liền chúng.
+\end{itemize}
+
+\subsubsection{Phạm vi thời gian}
+\begin{itemize}
+    \item \textbf{Dữ liệu lịch sử:} Phân tích dữ liệu trong khoảng thời gian từ 6 tháng đến 1 năm gần nhất để đảm bảo phản ánh chính xác xu hướng và đặc điểm hiện tại của tình trạng giao thông, đồng thời có đủ dữ liệu để huấn luyện mô hình học máy.
+    
+    \item \textbf{Phân tích theo khung giờ:} Tập trung vào các khung giờ cao điểm (7h-9h sáng, 17h-19h chiều) và so sánh với giờ thấp điểm để đánh giá sự khác biệt về mức độ tương quan.
+    
+    \item \textbf{Độ phân giải thời gian:} Dữ liệu được thu thập và phân tích với độ phân giải 5-10 phút để cân bằng giữa độ chi tiết và khả năng xử lý.
+\end{itemize}
+
+\subsubsection{Phạm vi kỹ thuật}
+\begin{itemize}
+    \item \textbf{Phương pháp phân tích:} Sử dụng các kỹ thuật Big Data (Apache Spark), Deep Learning (Graph Neural Networks, LSTM), và các phương pháp thống kê (Granger Causality Test, correlation analysis).
+    
+    \item \textbf{Loại dữ liệu:} Dữ liệu về tốc độ trung bình, mật độ phương tiện, thời gian di chuyển tại các nút giao thông. Không bao gồm dữ liệu cá nhân hoặc dữ liệu nhận dạng phương tiện.
+    
+    \item \textbf{Nền tảng tích hợp:} Hệ thống được phát triển như một module mở rộng của UTraffic, tương thích với kiến trúc hiện có.
+\end{itemize}
+
+\subsubsection{Giới hạn của đề tài}
+Đề tài \textbf{không bao gồm}:
+\begin{itemize}
+    \item Dự báo dài hạn (trên 2 giờ) về tình trạng giao thông.
+    \item Phân tích ảnh hưởng của các yếu tố thời tiết cực đoan, sự kiện đặc biệt (lễ hội, biểu tình).
+    \item Đề xuất giải pháp điều chỉnh hạ tầng vật lý (xây dựng đường mới, cầu vượt).
+    \item Tối ưu hóa chu kỳ đèn tín hiệu (có thể là hướng phát triển tương lai dựa trên kết quả phân tích).
+\end{itemize}
+
+\subsubsection{Đối tượng thực hiện và thụ hưởng}
+\begin{itemize}
+    \item \textbf{Đối tượng thực hiện:} Sinh viên ngành Công nghệ thông tin, chuyên ngành Big Data và Deep Learning.
+    
+    \item \textbf{Đối tượng thụ hưởng:} 
+    \begin{itemize}
+        \item Cơ quan quản lý giao thông đô thị (Sở GTVT TP.HCM).
+        \item Các đơn vị cung cấp dịch vụ giám sát, điều khiển giao thông.
+        \item Nhà quy hoạch và nghiên cứu về hạ tầng giao thông.
+        \item Người dân TP.HCM thông qua việc cải thiện tình trạng giao thông.
+    \end{itemize}
+\end{itemize}
+
+Việc mở rộng nghiên cứu sang các khu vực khác trong TP.HCM hoặc áp dụng cho các đô thị khác tại Việt Nam sẽ được thảo luận trong phần hướng phát triển tương lai.
+
+\newpage
+\subsection{Ý nghĩa}
+\subsubsection{Ý nghĩa thực tiễn}
+Kết quả nghiên cứu của đồ án mang lại những giá trị ứng dụng thực tế quan trọng đối với công tác quản lý và vận hành mạng lưới giao thông đô thị tại TP.HCM:
+
+\begin{itemize}
+    \item \textbf{Hỗ trợ điều phối giao thông theo mạng lưới (Network-wide Management):} Thay vì điều tiết cục bộ tại từng nút giao độc lập, giải pháp giúp các cơ quan chức năng có "bức tranh toàn cảnh" về mối liên hệ giữa các nút giao thông. Từ đó nhận diện được nút giao nào là nguyên nhân gốc rễ (root cause) gây ra sự ùn tắc lan truyền sang các khu vực lân cận, để có phương án xử lý ưu tiên và hiệu quả hơn.
+    
+    \item \textbf{Cảnh báo sớm và dự báo chủ động:} Hệ thống có khả năng phát hiện các dấu hiệu ban đầu của tắc nghẽn tại một nút và dự đoán khả năng lan truyền sang các nút khác dựa trên mối quan hệ đã được học. Điều này cho phép các cơ quan chức năng can thiệp sớm, giảm thiểu thời gian và mức độ ùn tắc.
+    
+    \item \textbf{Cơ sở cho việc đồng bộ hóa tín hiệu đèn (Signal Synchronization):} Việc định lượng được mức độ ảnh hưởng và độ trễ của dòng giao thông giữa các nút là tham số đầu vào quan trọng để thiết lập các làn sóng xanh (Green Wave) hoặc tối ưu hóa chu kỳ đèn tín hiệu tại các giao lộ liên tiếp, giúp dòng xe di chuyển mượt mà hơn.
+    
+    \item \textbf{Tối ưu hóa đầu tư hạ tầng giám sát:} Hệ thống giúp xác định các cặp nút giao thông có độ tương quan cao và các nút có tầm quan trọng chiến lược (hub nodes). Thông tin này hỗ trợ quy hoạch lắp đặt thêm cảm biến, camera hoặc nâng cấp hạ tầng tại các vị trí trọng yếu, tối ưu hóa chi phí đầu tư.
+    
+    \item \textbf{Cung cấp thông tin hữu ích cho người tham gia giao thông:} Người dùng không chỉ biết điểm nào đang kẹt mà còn hiểu được xu hướng lan truyền của tắc nghẽn, từ đó chủ động chọn lộ trình tránh các trục đường đang chịu ảnh hưởng dây chuyền, tiết kiệm thời gian di chuyển.
+    
+    \item \textbf{Nâng cao hiệu quả vận hành hệ thống UTraffic:} Đề tài giúp chuyển hóa dữ liệu thô từ UTraffic thành các tri thức về cấu trúc vận hành của mạng lưới giao thông, tăng giá trị sử dụng của hệ thống hiện có mà không cần đầu tư lớn vào phần cứng mới.
+\end{itemize}
+
+\subsubsection{Ý nghĩa khoa học}
+Về mặt nghiên cứu, đề tài đóng góp những giá trị học thuật trong việc áp dụng Trí tuệ nhân tạo và Big Data vào bài toán Giao thông thông minh (Intelligent Transportation Systems - ITS):
+
+\begin{itemize}
+    \item \textbf{Mô hình hóa sự phụ thuộc không gian - thời gian (Spatio-Temporal Dependency):} Đồ án tập trung nghiên cứu và định lượng mối quan hệ phức tạp giữa các nút giao thông trong mạng lưới đô thị. Thay vì chỉ xét khoảng cách địa lý, nghiên cứu đề xuất phương pháp học các mối liên hệ ẩn (latent correlations) dựa trên dữ liệu dòng chảy thực tế, phản ánh đúng bản chất động của hệ thống giao thông.
+    
+    \item \textbf{Ứng dụng Graph Neural Networks (GNN) cho giao thông Việt Nam:} Đóng góp vào việc kiểm chứng hiệu quả của các kiến trúc học sâu trên dữ liệu đồ thị (graph-based data) đối với đặc thù giao thông hỗn hợp tại Việt Nam - nơi mà các quy luật di chuyển thường phức tạp và khó nắm bắt hơn so với các nước phát triển do sự đa dạng về loại phương tiện (xe máy, ô tô, xe buýt) và văn hóa tham gia giao thông.
+    
+    \item \textbf{Phân tích quan hệ nhân quả trong mạng lưới giao thông:} Áp dụng các phương pháp thống kê tiên tiến như Granger Causality Test để không chỉ phát hiện tương quan mà còn xác định quan hệ nhân - quả giữa các nút giao thông. Đây là hướng nghiên cứu quan trọng nhưng chưa được khai thác nhiều trong các công trình về giao thông tại Việt Nam.
+    
+    \item \textbf{Xây dựng dataset giao thông TP.HCM:} Đề tài góp phần xây dựng và công bố một dataset về giao thông đô thị TP.HCM có gắn nhãn về mối liên hệ giữa các nút giao thông, phục vụ cho cộng đồng nghiên cứu trong và ngoài nước.
+    
+    \item \textbf{Cơ sở cho hệ thống giao thông thích nghi (Adaptive Traffic Systems):} Việc phân tích thành công mối liên hệ động (dynamic relationships) giữa các nút giao thông sẽ là tiền đề quan trọng để phát triển các hệ thống AI có khả năng tự thích nghi với sự thay đổi cấu trúc mạng lưới giao thông theo thời gian thực, hướng tới mô hình giao thông tự trị (autonomous traffic management).
+    
+    \item \textbf{Kết hợp đa phương pháp (Multi-method Approach):} Đề tài tích hợp nhiều phương pháp từ các lĩnh vực khác nhau: Graph Theory, Deep Learning, Time Series Analysis, Statistical Causality, tạo ra một framework toàn diện để giải quyết bài toán phức tạp về giao thông đô thị.
+\end{itemize}
+
+\newpage
+\subsection{Cấu trúc báo cáo} Nội dung của đồ án được tổ chức và trình bày theo 9 chương chính, cụ thể như sau:
+
+\begin{itemize} \item \textbf{Chương 1 - Giới thiệu:} Trình bày bối cảnh thực hiện đề tài, xác định vấn đề cần giải quyết, mục tiêu, phạm vi nghiên cứu và ý nghĩa thực tiễn của việc phân tích mối liên hệ giao thông.
+
+\item \textbf{Chương 2 - Kiến thức và công nghệ nền tảng:} Cung cấp cơ sở lý thuyết về các mô hình học sâu trên đồ thị (GCN, GAT) và chuỗi thời gian (RNN, LSTM, GRU). Chương này cũng đi sâu vào kiến trúc T-GCN, các cải tiến hiện đại như Dynamic Graph Learning, cùng với hệ sinh thái công nghệ được sử dụng (Python, PyTorch, kiến trúc Kappa với Kafka/Flink, Docker và Kubernetes).
+
+\item \textbf{Chương 3 - Công trình liên quan:} Khảo sát các nghiên cứu về mô hình lan truyền, các phương pháp Deep Learning với ma trận kề tĩnh và động. Đồng thời, chương này phân tích các hệ thống thực tế như Google Maps, TomTom, UTraffic để xác định khoảng trống nghiên cứu (Gap Analysis) mà đề tài hướng tới giải quyết.
+
+\item \textbf{Chương 4 - Phương pháp giải quyết:} Đây là chương trọng tâm mô tả chi tiết quy trình khoa học dữ liệu và thuật toán. Nội dung bao gồm:
+\begin{itemize}
+    \item Quy trình thu thập và tiền xử lý dữ liệu từ TomTom API.
+    \item Trích xuất đặc trưng không gian - thời gian và phân tích tương quan (DTW, Wavelet).
+    \item Kiểm định quan hệ nhân quả (Granger Causality) để xây dựng đồ thị nhân quả.
+    \item Xây dựng mô hình dự báo Dynamic Graph Convolutional Network và chiến lược huấn luyện.
+    \item Thiết kế hệ thống cảnh báo, phát hiện lan truyền tắc nghẽn và quy trình triển khai (Deployment).
+\end{itemize}
+
+\item \textbf{Chương 5 - Hệ thống đề xuất:} Tập trung vào khía cạnh kỹ thuật phần mềm, mô tả mục đích hệ thống, nhóm người dùng mục tiêu, và đặc tả chi tiết các yêu cầu chức năng, phi chức năng cũng như các yêu cầu khắt khe về dữ liệu đầu vào/đầu ra.
+
+\item \textbf{Chương 6 - Phân tích \& Thiết kế hệ thống:} Trình bày mô hình hóa tương tác người dùng, quy trình nghiệp vụ, và thiết kế chi tiết kiến trúc giải pháp công nghệ (Frontend, Backend) để hiện thực hóa các yêu cầu đã đặt ra.
+
+\item \textbf{Chương 7 - Hiện thực và kiểm thử:} Mô tả quá trình hiện thực mã nguồn, môi trường cài đặt và các kết quả kiểm thử hệ thống để đảm bảo tính đúng đắn của các chức năng.
+
+\item \textbf{Chương 8 - Đánh giá hệ thống:} Đánh giá tổng thể hiệu quả của hệ thống sau khi triển khai thực tế hoặc trên môi trường thử nghiệm.
+
+\item \textbf{Chương 9 - Tổng kết:} Tóm tắt các kết quả đạt được, đối chiếu với mục tiêu ban đầu, nêu rõ tính mới và đóng góp của đề tài, đồng thời đề xuất các hướng phát triển trong tương lai.
+\end{itemize}
+
+Ngoài ra, báo cáo còn bao gồm danh mục tài liệu tham khảo và các phụ lục liên quan đến mã nguồn và kết quả thực nghiệm chi tiết.

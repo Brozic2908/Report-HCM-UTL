@@ -1,0 +1,352 @@
+\section{Kiến thức và công nghệ nền tảng}
+\subsection{Tổng quan về phân tích tương quan giao thông đô thị}
+
+\subsubsection{Đặc điểm giao thông đô thị và các thách thức}
+
+Giao thông đô thị tại các thành phố lớn thường mang tính phi tuyến, đa biến và chịu ảnh hưởng đồng thời của nhiều yếu tố tự nhiên -- xã hội. Sự gia tăng mạnh mẽ của phương tiện cá nhân, hạ tầng hạn chế, cùng với tính khó đoán trong hành vi tham gia giao thông khiến việc phân tích và dự báo trở thành một bài toán phức tạp. Hơn nữa, trạng thái giao thông không chỉ bị chi phối tại chỗ mà còn lan truyền theo mạng lưới đường, dẫn đến hiện tượng "tắc nghẽn dây chuyền" (spillover congestion). 
+
+Đối với các hệ thống quản lý giao thông thông minh (ITS), việc hiểu rõ bản chất tương tác không gian--thời gian giữa các nút giao là cơ sở để thiết kế mô hình dự báo có độ chính xác cao, hỗ trợ lập kế hoạch và điều tiết giao thông hiệu quả.
+
+\subsubsubsection{Đặc điểm giao thông tại TP.HCM}
+
+TP.HCM là đô thị có cơ cấu phương tiện đặc thù với tỷ lệ xe máy chiếm ưu thế tuyệt đối. Đặc điểm này hình thành một môi trường giao thông không đồng nhất, giàu biến động và khó chuẩn hóa. Một số đặc điểm quan trọng của giao thông TP.HCM bao gồm:
+
+\begin{itemize}
+    \item \textbf{Xe máy chiếm hơn 90\% tổng phương tiện}: tạo nên dòng di chuyển linh hoạt, không tuân thủ nghiêm ngặt làn đường.
+    \item \textbf{Mật độ sở hữu xe máy cao (> 350 xe/1000 dân)}: gây áp lực lớn lên hạ tầng đô thị.
+    \item \textbf{Dòng xe hỗn hợp}: ô tô, xe tải, xe buýt, xe máy di chuyển xen kẽ, làm gia tăng độ bất định của lưu lượng.
+    \item \textbf{Tác động mạnh từ môi trường xã hội}: thời tiết, sự kiện, ùn tắc cục bộ có thể làm biến đổi trạng thái giao thông toàn khu vực.
+\end{itemize}
+
+Những yếu tố này đòi hỏi mô hình phân tích phải đủ linh hoạt để phản ánh đúng tính động, tính phi tuyến và tính bất định của hệ thống giao thông đô thị.
+
+\subsubsubsection{Hiện tượng lan truyền tắc nghẽn}
+
+Tắc nghẽn giao thông không chỉ xảy ra tại một điểm mà có khả năng lan truyền đến các đoạn đường lân cận. Một đoạn đường quá tải sẽ làm giảm tốc độ, tăng mật độ phương tiện, và gây ảnh hưởng lên khả năng lưu thông đầu vào -- đầu ra của các nút láng giềng. Hiện tượng này có thể được mô hình hóa như một quá trình lan truyền:
+
+\begin{equation}
+\frac{dc(t)}{dt} = -\mu c(t) + \beta(k-1)c(t)[1-r(t)-c(t)]
+\end{equation}
+
+Trong đó:
+\begin{itemize}
+    \item $c(t)$: tỷ lệ đoạn đường đang tắc tại thời điểm $t$,
+    \item $\beta$: tốc độ lan truyền tắc nghẽn,
+    \item $\mu$: tốc độ hồi phục,
+    \item $k$: bậc trung bình của nút trong mạng lưới,
+    \item $r(t)$: tỷ lệ đoạn đường đã hồi phục.
+\end{itemize}
+
+Mô hình này cho phép mô tả cách tắc nghẽn di chuyển theo mạng lưới, từ đó hỗ trợ dự báo các hiện tượng "hiệu ứng domino" trong giao thông đô thị.
+
+\subsubsection{Phân tích tương quan không gian--thời gian}
+
+Hệ thống giao thông biểu hiện đồng thời hai loại phụ thuộc quan trọng: 
+\begin{enumerate}
+    \item \textbf{Phụ thuộc theo không gian}: trạng thái của một đoạn đường nằm dưới ảnh hưởng của các đoạn đường lân cận.
+    \item \textbf{Phụ thuộc theo thời gian}: trạng thái hiện tại liên quan mật thiết đến trạng thái của chính nó ở các thời điểm trước.
+\end{enumerate}
+
+Sự kết hợp giữa hai chiều phụ thuộc này tạo nên tính chất "không gian--thời gian" (spatiotemporal), đóng vai trò then chốt trong các mô hình học sâu hiện đại.
+
+\subsubsubsection{Tương quan không gian (Spatial Dependence)}
+
+Tương quan không gian phản ánh mức độ ảnh hưởng lẫn nhau giữa các nút giao hoặc đoạn đường. Khi một khu vực xảy ra ùn tắc, áp lực sẽ lan truyền theo các tuyến liên thông. Hệ số tương quan giữa hai đoạn đường $i$ và $j$ được xác định như sau:
+
+\begin{equation}
+r_{ij} = \frac{\sum_{d,t}(y_{itd}-\bar{y}_i)\, w_{ij}(y_{jtd}-\bar{y}_j)}{\sqrt{\sum_{d,t}(y_{itd}-\bar{y}_i)^2 \sum_{d,t}(y_{jtd}-\bar{y}_j)^2}}
+\end{equation}
+
+Trong đó, trọng số $w_{ij}$ biểu thị sự gần gũi không gian dựa trên:
+\begin{itemize}
+    \item khoảng cách địa lý,
+    \item mức độ kết nối trực tiếp giữa hai đoạn đường,
+    \item thời gian di chuyển trung bình,
+    \item hoặc cấu trúc của mạng lưới giao thông.
+\end{itemize}
+
+\subsubsubsection{Tương quan thời gian (Temporal Dependence)}
+
+Lưu lượng giao thông biến đổi theo các quy luật thời gian rõ rệt. Hai đặc điểm nổi bật bao gồm:
+
+\begin{itemize}
+    \item \textbf{Tính chu kỳ}:  
+    Giao thông thường lặp lại theo các khung giờ cao điểm -- thấp điểm hàng ngày (sáng, trưa, chiều) hoặc các mô hình theo ngày trong tuần.
+    
+    \item \textbf{Tính phụ thuộc thời điểm}:  
+    Lưu lượng tại thời điểm $t$ chịu ảnh hưởng mạnh từ trạng thái của chính nó tại các thời điểm $t-1$, $t-2$, …
+\end{itemize}
+
+\subsubsubsection{Mô hình hóa tương quan động}
+
+Mối quan hệ giữa các đoạn đường không phải là bất biến. Chúng biến đổi theo thời gian do:
+\begin{itemize}
+    \item thay đổi dòng xe,
+    \item thời tiết, mưa, ngập,
+    \item sự kiện đột xuất,
+    \item tai nạn hoặc phong tỏa đường.
+\end{itemize}
+
+Do đó, ma trận quan hệ giữa các nút cần được mô hình hóa dưới dạng động:
+
+\begin{equation}
+A_t = f_{corr}(X_t, \theta)
+\end{equation}
+
+Trong đó:
+\begin{itemize}
+    \item $A_t$: ma trận kề đại diện cho cấu trúc không gian tại thời điểm $t$,
+    \item $X_t$: đặc trưng giao thông (tốc độ, lưu lượng, mật độ, độ trễ…),
+    \item $\theta$: tham số mô hình học được.
+\end{itemize}
+
+\newpage
+
+\subsection{Lý thuyết đồ thị và Graph Neural Networks}
+
+\subsubsection{Biểu diễn mạng giao thông dưới dạng đồ thị}
+
+\subsubsubsection{Định nghĩa đồ thị giao thông}
+
+Một mạng giao thông đô thị có thể được mô hình hoá dưới dạng đồ thị có hướng
+$\mathcal{G} = (\mathcal{V}, \mathcal{E}, \mathcal{A})$, trong đó:
+\begin{itemize}
+    \item $\mathcal{V} = \{v_1, v_2, \dots, v_N\}$ là tập $N$ nút, mỗi nút đại diện cho một đoạn đường, giao lộ hoặc điểm đo cảm biến.
+    \item $\mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$ là tập các cạnh có hướng, phản ánh mối quan hệ kết nối hoặc luồng giao thông từ đoạn đường này sang đoạn đường khác.
+    \item $\mathcal{A} \in \mathbb{R}^{N \times N}$ là ma trận kề, mã hoá mức độ liên kết giữa các nút. 
+\end{itemize}
+
+Đối với bài toán dự báo giao thông, cách xây dựng ma trận kề $\mathcal{A}$ đóng vai trò đặc biệt quan trọng vì nó quyết định mô hình học các tương tác không gian như thế nào.
+
+\subsubsubsection{Đặc trưng nút và cạnh}
+
+Ma trận đặc trưng của các nút tại thời điểm $t$ được biểu diễn bởi $\mathbf{X}^{(t)} \in \mathbb{R}^{N \times F}$, trong đó:
+\begin{itemize}
+    \item $N$ là số lượng nút trong mạng.
+    \item $F$ là số chiều của không gian đặc trưng, ví dụ: tốc độ trung bình, mật độ xe, lưu lượng qua trạm, thời gian chờ,...
+    \item $\mathbf{X}^{(t)}_{i,:}$ là vector đặc trưng của nút $i$ tại thời điểm $t$.
+\end{itemize}
+
+Trong một số mô hình nâng cao, đặc trưng cạnh $E_{ij}$ cũng có thể được bổ sung, ví dụ: chiều dài đoạn đường, số làn xe, tốc độ tối đa, hoặc dữ liệu cảm biến IoT đặt dọc tuyến.
+
+\subsubsection{Graph Convolutional Networks (GCN)}
+
+\subsubsubsection{Phép tích chập trên đồ thị}
+
+GCN được thiết kế để mở rộng phép tích chập từ không gian Euclidean (ảnh, âm thanh) sang cấu trúc đồ thị phi Euclidean. Công thức phổ biến của GCN (theo Kipf \& Welling) là:
+
+\begin{equation}
+\mathbf{H}^{(l+1)} = \sigma\left(\tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{-\frac{1}{2}} \mathbf{H}^{(l)} \mathbf{W}^{(l)}\right),
+\end{equation}
+
+trong đó:
+\begin{itemize}
+    \item $\tilde{A} = A + I_N$ bổ sung self-loop giúp mỗi nút sử dụng thêm thông tin của chính nó,
+    \item $\tilde{D}$ là ma trận bậc tương ứng với $\tilde{A}$,
+    \item $W^{(l)}$ là trọng số của lớp thứ $l$,
+    \item $\sigma$ là hàm kích hoạt phi tuyến.
+\end{itemize}
+
+GCN cho phép khuếch tán thông tin giữa các nút theo cấu trúc không gian của mạng giao thông, đóng vai trò nền tảng cho việc mô hình hóa tương quan không gian.
+
+\newpage
+
+\subsection{Mô hình Transformer và BERT}
+
+\subsubsection{Kiến trúc Transformer}
+
+\subsubsubsection{Cơ chế Self-Attention}
+
+Transformer là kiến trúc học sâu dựa trên cơ chế attention, được đề xuất bởi Vaswani và cộng sự năm 2017. Khác với RNN/LSTM xử lý tuần tự, Transformer có thể xử lý toàn bộ chuỗi đầu vào song song thông qua cơ chế self-attention.
+
+Cho một chuỗi đầu vào $\mathbf{X} = [\mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_T]$, self-attention tính toán như sau:
+
+\begin{align}
+\mathbf{Q} &= \mathbf{X}\mathbf{W}^Q, \quad \mathbf{K} = \mathbf{X}\mathbf{W}^K, \quad \mathbf{V} = \mathbf{X}\mathbf{W}^V \\
+\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) &= \text{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^T}{\sqrt{d_k}}\right)\mathbf{V}
+\end{align}
+
+Trong đó:
+\begin{itemize}
+    \item $\mathbf{Q}$ (Query), $\mathbf{K}$ (Key), $\mathbf{V}$ (Value) là các phép chiếu tuyến tính của đầu vào
+    \item $d_k$ là chiều của không gian key, dùng để chuẩn hóa
+    \item Softmax tạo ra phân phối xác suất thể hiện mức độ quan trọng của mỗi vị trí
+\end{itemize}
+
+Cơ chế này cho phép mỗi vị trí trong chuỗi "chú ý" đến tất cả các vị trí khác, nắm bắt được mối quan hệ phụ thuộc dài hạn mà không gặp vấn đề vanishing gradient như RNN.
+
+\subsubsubsection{Multi-Head Attention}
+
+Để tăng khả năng biểu diễn, Transformer sử dụng nhiều attention heads song song:
+
+\begin{align}
+\text{head}_i &= \text{Attention}(\mathbf{Q}\mathbf{W}_i^Q, \mathbf{K}\mathbf{W}_i^K, \mathbf{V}\mathbf{W}_i^V) \\
+\text{MultiHead}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) &= \text{Concat}(\text{head}_1, \dots, \text{head}_h)\mathbf{W}^O
+\end{align}
+
+Mỗi head học một khía cạnh khác nhau của mối quan hệ giữa các vị trí trong chuỗi.
+
+\subsubsubsection{Positional Encoding}
+
+Vì Transformer xử lý song song, nó không có thông tin về thứ tự trong chuỗi. Do đó, positional encoding được thêm vào:
+
+\begin{align}
+PE_{(pos, 2i)} &= \sin\left(\frac{pos}{10000^{2i/d_{model}}}\right) \\
+PE_{(pos, 2i+1)} &= \cos\left(\frac{pos}{10000^{2i/d_{model}}}\right)
+\end{align}
+
+Điều này giúp mô hình phân biệt được vị trí tương đối và tuyệt đối của các phần tử trong chuỗi.
+
+\subsubsection{BERT: Bidirectional Encoder Representations from Transformers}
+
+\subsubsubsection{Kiến trúc BERT}
+
+BERT là mô hình pre-training dựa trên Transformer encoder, được giới thiệu bởi Devlin và cộng sự (Google AI) năm 2018. Khác với các mô hình ngôn ngữ truyền thống chỉ đọc văn bản theo một chiều (trái sang phải hoặc phải sang trái), BERT đọc theo cả hai chiều (bidirectional) để hiểu ngữ cảnh đầy đủ.
+
+\textbf{Cấu trúc cơ bản:}
+\begin{itemize}
+    \item BERT-Base: 12 lớp Transformer, 768 hidden units, 12 attention heads, 110M parameters
+    \item BERT-Large: 24 lớp Transformer, 1024 hidden units, 16 attention heads, 340M parameters
+\end{itemize}
+
+Đầu vào của BERT là một chuỗi token được mã hóa thành:
+\begin{equation}
+\mathbf{E} = \mathbf{E}_{token} + \mathbf{E}_{segment} + \mathbf{E}_{position}
+\end{equation}
+
+Trong đó:
+\begin{itemize}
+    \item $\mathbf{E}_{token}$: embedding của token
+    \item $\mathbf{E}_{segment}$: embedding phân biệt các câu khác nhau
+    \item $\mathbf{E}_{position}$: positional encoding
+\end{itemize}
+
+\subsubsubsection{Chiến lược Pre-training của BERT}
+
+BERT sử dụng hai nhiệm vụ pre-training:
+
+\textbf{1. Masked Language Model (MLM):}
+
+Ngẫu nhiên che (mask) 15\% tokens trong chuỗi đầu vào và huấn luyện mô hình dự đoán các token bị che:
+
+\begin{equation}
+\mathcal{L}_{MLM} = -\sum_{i \in \mathcal{M}} \log P(x_i | \mathbf{x}_{\backslash \mathcal{M}})
+\end{equation}
+
+Trong đó $\mathcal{M}$ là tập các vị trí bị mask.
+
+\textbf{2. Next Sentence Prediction (NSP):}
+
+Dự đoán xem câu B có phải là câu tiếp theo của câu A hay không:
+
+\begin{equation}
+\mathcal{L}_{NSP} = -\log P(IsNext | [CLS], \text{SentA}, \text{SentB})
+\end{equation}
+
+Token đặc biệt [CLS] được thêm vào đầu mỗi chuỗi và đại diện cho toàn bộ chuỗi trong các tác vụ phân loại.
+
+\subsubsubsection{Fine-tuning BERT}
+
+Sau pre-training, BERT có thể được fine-tune cho các tác vụ downstream cụ thể bằng cách:
+\begin{itemize}
+    \item Thêm một lớp output phù hợp (classification, regression, sequence labeling...)
+    \item Huấn luyện end-to-end trên dữ liệu của tác vụ đích
+    \item Sử dụng learning rate nhỏ để tránh "catastrophic forgetting"
+\end{itemize}
+
+\subsubsection{Ưu điểm của BERT trong phân tích chuỗi thời gian}
+
+\begin{enumerate}
+    \item \textbf{Học biểu diễn ngữ cảnh hai chiều:} BERT xem xét cả thông tin quá khứ và tương lai, phù hợp với việc phân tích mối quan hệ phức tạp trong dữ liệu giao thông.
+
+    \item \textbf{Khả năng xử lý song song:} Khác với RNN/LSTM xử lý tuần tự, BERT có thể xử lý toàn bộ chuỗi đầu vào đồng thời, tăng tốc độ huấn luyện và inference.
+
+    \item \textbf{Nắm bắt phụ thuộc dài hạn:} Self-attention cho phép mô hình kết nối trực tiếp các vị trí xa nhau trong chuỗi, vượt trội hơn LSTM trong việc học các mẫu chu kỳ dài.
+
+    \item \textbf{Pre-training và transfer learning:} BERT có thể được pre-train trên dữ liệu lớn và fine-tune trên tác vụ cụ thể với dữ liệu hạn chế.
+
+    \item \textbf{Khả năng tích hợp với Graph:} BERT có thể kết hợp với GNN để tạo nên các mô hình hybrid mạnh mẽ cho dữ liệu đồ thị có tính thời gian.
+\end{enumerate}
+
+\subsubsection{Áp dụng BERT cho dữ liệu giao thông}
+
+\subsubsubsection{Tokenization cho chuỗi thời gian}
+
+Trong bài toán giao thông, mỗi "token" có thể là:
+\begin{itemize}
+    \item Một bước thời gian (time step) với vector đặc trưng tương ứng
+    \item Một cửa sổ thời gian được tổng hợp (sliding window)
+    \item Một đoạn đường tại một thời điểm cụ thể
+\end{itemize}
+
+Vector đặc trưng cho mỗi token có thể bao gồm: tốc độ, mật độ, lưu lượng, thời tiết, ngày trong tuần, v.v.
+
+\subsubsubsection{Spatial-Temporal BERT}
+
+Để áp dụng BERT vào dữ liệu giao thông có tính không gian-thời gian, ta cần:
+
+\textbf{1. Encoding không gian:}
+\begin{equation}
+\mathbf{E}_{spatial}(v_i) = \text{Learnable\_Embedding}(i) \quad \text{hoặc} \quad \text{GCN}(\mathbf{A}, \mathbf{X}_i)
+\end{equation}
+
+\textbf{2. Encoding thời gian:}
+\begin{equation}
+\mathbf{E}_{temporal}(t) = \mathbf{E}_{position}(t) + \mathbf{E}_{hour}(t) + \mathbf{E}_{day}(t) + \mathbf{E}_{week}(t)
+\end{equation}
+
+\textbf{3. Kết hợp:}
+\begin{equation}
+\mathbf{E}(v_i, t) = \mathbf{X}_{i,t} + \mathbf{E}_{spatial}(v_i) + \mathbf{E}_{temporal}(t)
+\end{equation}
+
+\subsubsubsection{BERT-GNN Hybrid Model}
+
+Mô hình kết hợp có thể được thiết kế theo các cách:
+
+\textbf{Phương án 1: GNN trước, BERT sau}
+\begin{align}
+\mathbf{H}_t^{spatial} &= \text{GCN}(\mathbf{A}, \mathbf{X}_t) \\
+\mathbf{H}^{temporal} &= \text{BERT}([\mathbf{H}_1^{spatial}, \dots, \mathbf{H}_T^{spatial}])
+\end{align}
+
+\textbf{Phương án 2: BERT trước, GNN sau}
+\begin{align}
+\mathbf{H}_i^{temporal} &= \text{BERT}([\mathbf{X}_{i,1}, \dots, \mathbf{X}_{i,T}]) \\
+\mathbf{H}^{output} &= \text{GCN}(\mathbf{A}, [\mathbf{H}_1^{temporal}, \dots, \mathbf{H}_N^{temporal}])
+\end{align}
+
+\textbf{Phương án 3: Xen kẽ GNN và BERT}
+\begin{equation}
+\mathbf{H}^{(l+1)} = \text{BERT}(\text{GCN}(\mathbf{H}^{(l)}))
+\end{equation}
+
+\subsubsection{So sánh BERT với các phương pháp khác}
+
+\begin{table}[h]
+\centering
+\caption{So sánh BERT với RNN/LSTM/GRU}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Tiêu chí} & \textbf{RNN/LSTM/GRU} & \textbf{BERT} \\ \hline
+Xử lý tuần tự & Có & Không (song song) \\ \hline
+Tốc độ huấn luyện & Chậm & Nhanh \\ \hline
+Phụ thuộc dài hạn & Khó (LSTM/GRU tốt hơn RNN) & Rất tốt \\ \hline
+Ngữ cảnh hai chiều & Không (trừ Bi-LSTM) & Có \\ \hline
+Số tham số & Ít đến trung bình & Nhiều \\ \hline
+Yêu cầu dữ liệu & Thấp đến trung bình & Cao (pre-training) \\ \hline
+Transfer learning & Khó & Dễ dàng \\ \hline
+Khả năng diễn giải & Tương đối tốt & Khó hơn \\ \hline
+\end{tabular}
+\label{tab:bert_vs_rnn}
+\end{table}
+
+\subsection{Mô hình đề xuất: Traffic-BERT}
+
+\subsubsection{Kiến trúc tổng thể}
+
+Dựa trên nền tảng BERT và các đặc điểm của dữ liệu giao thông, nghiên cứu này đề xuất mô hình \textbf{Traffic-BERT} gồm các thành phần chính:
+
+\begin{enumerate}
+    \item \textbf{Spatial Encoder (GCN):} Trích xuất đặc trưng không gian từ cấu trúc mạng lưới
+    \item \textbf{Temporal Encoder (BERT):} Học mối quan hệ thời gian hai chi
