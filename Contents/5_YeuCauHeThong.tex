@@ -25,54 +25,48 @@ Hệ thống hướng đến ba nhóm người dùng chính:
 Tổng thể, hệ thống được thiết kế theo hướng mở, linh hoạt. Điều này cho phép hệ thống dễ dàng mở rộng, thay đổi hoặc kết hợp các phương pháp phân tích khi cần thiết, đồng thời đảm bảo phù hợp cho cả mục tiêu nghiên cứu lẫn ứng dụng thực tiễn trong phân tích tình trạng giao thông đô thị.
 \subsection{Yêu cầu}
 \subsubsection{Yêu cầu chức năng}
-\paragraph{Thu thập dữ liệu giao thông}
-\begin{itemize}
-    \item \textbf{FR1.1}: Hệ thống cho phép tải lên dữ liệu lịch sử giao thông.
-    \item \textbf{FR1.2}: Hỗ trợ nhiều định dạng dữ liệu đầu vào: JSON, GeoJSON, CSV.
-    \item \textbf{FR1.3}: Kiểm tra cấu trúc và tính hợp lệ của dữ liệu (schema validation).
-\end{itemize}
 
 \paragraph{Tiền xử lý dữ liệu}
 \begin{itemize}
-    \item \textbf{FR2.1}: Loại bỏ dữ liệu thiếu, sai định dạng hoặc bất thường.
-    \item \textbf{FR2.2}: Chuẩn hoá các thuộc tính như tốc độ, thời gian di chuyển, timestamp.
-    \item \textbf{FR2.3}: Ghép nối dữ liệu với mạng lưới đường (map-matching) khi cần.
+    \item \textbf{FR1.1}: Loại bỏ dữ liệu thiếu, sai định dạng hoặc bất thường.
+    \item \textbf{FR1.2}: Chuẩn hoá các thuộc tính như tốc độ, thời gian di chuyển, timestamp.
+    \item \textbf{FR1.3}: Ghép nối dữ liệu với mạng lưới đường (map-matching) khi cần.
 \end{itemize}
 
 \paragraph{Phân tích mạng lưới giao thông}
 \begin{itemize}
-    \item \textbf{FR3.1}: Xây dựng mô hình đồ thị gồm các nút (node) và cạnh (segment).
-    \item \textbf{FR3.2}: Tính toán các thông số của mạng đường: độ dài, phân cấp đường (FRC), các chỉ số trung tâm.
-    \item \textbf{FR3.3}: Xác định “điểm nóng” (hotspot) tắc nghẽn theo thời gian.
+    \item \textbf{FR2.1}: Xây dựng mô hình đồ thị gồm các nút (node) và cạnh (segment).
+    \item \textbf{FR2.2}: Tính toán các thông số của mạng đường: độ dài, phân cấp đường (FRC), các chỉ số trung tâm.
+    \item \textbf{FR2.3}: Xác định “điểm nóng” (hotspot) tắc nghẽn theo thời gian.
 \end{itemize}
 
 \paragraph{Phân tích mối liên hệ giữa các đoạn đường}
 \begin{itemize}
-    \item \textbf{FR4.1}: Tính toán mức độ tương quan giữa các đoạn đường theo thời gian.
-    \item \textbf{FR4.2}: Đo độ tương đồng dạng thời gian bằng kỹ thuật Dynamic Time Warping (DTW).
-    \item \textbf{FR4.3}: Phát hiện hiện tượng lan truyền tắc nghẽn trong mạng lưới.
+    \item \textbf{FR3.1}: Tính toán mức độ tương quan giữa các đoạn đường theo thời gian.
+    \item \textbf{FR3.2}: Đo độ tương đồng dạng thời gian bằng kỹ thuật Dynamic Time Warping (DTW).
+    \item \textbf{FR3.3}: Phát hiện hiện tượng lan truyền tắc nghẽn trong mạng lưới.
 \end{itemize}
 
-\paragraph{Dự báo tình trạng giao thông}
+\paragraph{Dự báo lan truyền ùn tắc giao thông}
 \begin{itemize}
-    \item \textbf{FR5.1}: Xây dựng tập dữ liệu theo chuỗi thời gian (time-series).
-    \item \textbf{FR5.2}: Huấn luyện mô hình dự báo như LSTM, GCN, T-GCN,...
-    \item \textbf{FR5.3}: Đánh giá độ chính xác mô hình bằng các thước đo MAE, RMSE.
+    \item \textbf{FR4.1}: Xây dựng tập dữ liệu theo chuỗi thời gian kết hợp với cấu trúc mạng lưới giao thông nhằm mô hình hóa sự lan truyền của ùn tắc giữa các nút và đoạn đường.
+    \item \textbf{FR4.2}: Áp dụng và huấn luyện các mô hình dự báo lan truyền ùn tắc giao thông trên mạng lưới giao thông.
+    \item \textbf{FR4.3}: Đánh giá hiệu quả và độ chính xác của mô hình dự báo lan truyền thông qua các thước đo như MAE, RMSE, đồng thời phân tích khả năng phản ánh xu hướng lan truyền theo không gian và thời gian.
 \end{itemize}
 
 \paragraph{Trực quan hoá dữ liệu}
 \begin{itemize}
-    \item \textbf{FR6.1}: Hiển thị bản đồ mạng giao thông bằng dữ liệu OSM hoặc TomTom.
-    \item \textbf{FR6.2}: Trực quan tốc độ trung bình theo thời gian của từng segment.
-    \item \textbf{FR6.3}: Hiển thị biểu đồ chuỗi thời gian.
-    \item \textbf{FR6.4}: Hiển thị ma trận tương quan giữa các đoạn đường.
-    \item \textbf{FR6.5}: Cho phép thao tác xem dữ liệu trên dashboard (ví dụ: Streamlit).
+    \item \textbf{FR5.1}: Hiển thị bản đồ mạng giao thông bằng dữ liệu OSM hoặc TomTom.
+    \item \textbf{FR5.2}: Trực quan tốc độ trung bình theo thời gian của từng segment.
+    \item \textbf{FR5.3}: Hiển thị biểu đồ chuỗi thời gian.
+    \item \textbf{FR5.4}: Hiển thị ma trận tương quan giữa các đoạn đường.
+    \item \textbf{FR5.5}: Cho phép thao tác xem dữ liệu trên dashboard.
 \end{itemize}
 
 \paragraph{Xuất báo cáo}
 \begin{itemize}
-    \item \textbf{FR7.1}: Xuất kết quả phân tích ra các định dạng CSV, JSON hoặc PDF.
-    \item \textbf{FR7.2}: Cho phép tải xuống kết quả.
+    \item \textbf{FR6.1}: Xuất kết quả phân tích ra các định dạng CSV, JSON hoặc PDF.
+    \item \textbf{FR6.2}: Cho phép tải xuống kết quả.
 \end{itemize}
 \subsubsection{Yêu cầu phi chức năng}
 \paragraph{Khả năng mở rộng}
@@ -82,7 +76,7 @@ Tổng thể, hệ thống được thiết kế theo hướng mở, linh hoạt
 
 \paragraph{Hiệu năng}
 \begin{itemize}
-    \item Thời gian xử lý dữ liệu phải đảm bảo hiệu quả (ví dụ: xử lý 1 MB dữ liệu trong vòng dưới 5 giây).
+    \item Thời gian xử lý dữ liệu phải đảm bảo hiệu quả.
     \item Thời gian tải và hiển thị biểu đồ phải dưới 5 giây.
 \end{itemize}
 
@@ -93,7 +87,7 @@ Tổng thể, hệ thống được thiết kế theo hướng mở, linh hoạt
 
 \paragraph{Tính bảo trì}
 \begin{itemize}
-    \item Mã nguồn phải được tổ chức thành các module độc lập gồm: thu thập dữ liệu, tiền xử lý, phân tích, mô hình hoá và trực quan hoá.
+    \item Mã nguồn phải được tổ chức thành các module độc lập gồm: tiền xử lý, phân tích, mô hình hoá và trực quan hoá.
 \end{itemize}
 
 \paragraph{Tính tương thích}
@@ -111,7 +105,7 @@ Tổng thể, hệ thống được thiết kế theo hướng mở, linh hoạt
 \subsubsection{Yêu cầu dữ liệu}
 
 \subsubsubsection{Loại dữ liệu cần thu thập}
-Hệ thống cần thu thập dữ liệu mô tả tình trạng giao thông đô thị từ một hoặc nhiều nguồn khác nhau (API giao thông, cảm biến, dữ liệu mở, dữ liệu bản đồ số, v.v.). Các nhóm dữ liệu chính bao gồm:
+Hệ thống cần dữ liệu mô tả tình trạng giao thông đô thị có thể từ một hoặc nhiều nguồn khác nhau (API giao thông, cảm biến, dữ liệu mở, dữ liệu bản đồ số, v.v.). Các nhóm dữ liệu chính bao gồm:
 \begin{itemize}
     \item \textbf{Dữ liệu cấu trúc mạng lưới giao thông:}
     \begin{itemize}
@@ -124,8 +118,8 @@ Hệ thống cần thu thập dữ liệu mô tả tình trạng giao thông đ�
     \item \textbf{Dữ liệu thời gian:}
     \begin{itemize}
         \item Thời điểm thu thập dữ liệu.
-        \item Khoảng ngày quan sát (\textit{date ranges}).
-        \item Khoảng thời gian trong ngày (\textit{time sets}).
+        \item Khoảng ngày quan sát.
+        \item Khoảng thời gian trong ngày.
     \end{itemize}
 
     \item \textbf{Dữ liệu tình trạng giao thông:}
@@ -158,12 +152,12 @@ Hệ thống cần thu thập dữ liệu mô tả tình trạng giao thông đ�
     \item \textbf{Đầy đủ:} có đủ thông tin tối thiểu để phân tích tình trạng giao thông.
     \item \textbf{Nhất quán:} đồng nhất về đơn vị đo, định dạng thời gian và mã định danh.
     \item \textbf{Đúng cấu trúc:} các trường phải đúng kiểu dữ liệu.
-    \item \textbf{Giảm thiếu dữ liệu lỗi hoặc thiếu:} hạn chế phần tử bị trống hoặc sai lệch.
+    \item \textbf{Hạn chế dữ liệu lỗi hoặc thiếu:} hạn chế phần tử bị trống hoặc sai lệch.
     \item \textbf{Có thể truy vết:} biết rõ nguồn và thời điểm thu thập.
 \end{itemize}
 
 \subsubsubsection{Yêu cầu về cập nhật dữ liệu}
 \begin{itemize}
-    \item Hệ thống cần hỗ trợ nhập và cập nhật dữ liệu từ nhiều nguồn khác nhau trong tương lai.
-    \item Cho phép cập nhật định kỳ khi có dữ liệu mới.
+    \item Hệ thống cần hỗ trợ cập nhật dữ liệu từ nhiều nguồn khác nhau trong tương lai.
+    \item Hệ thống cho phép cập nhật định kỳ khi có dữ liệu mới.
 \end{itemize}

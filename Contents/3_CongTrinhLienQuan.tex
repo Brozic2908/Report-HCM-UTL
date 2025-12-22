@@ -1,130 +1,70 @@
 \section{Công trình liên quan}
 
-Chương này trình bày tổng quan một cách có hệ thống về các nghiên cứu khoa học và hệ thống thực tế liên quan trực tiếp đến bài toán phân tích và dự báo giao thông đô thị. Nội dung được triển khai theo ba hướng chính: (1) tổng hợp các mô hình nghiên cứu từ truyền thống đến hiện đại; (2) phân tích các hệ thống lớn đang được vận hành trong thực tiễn; và (3) xác định các khoảng trống khoa học (gap) mà đề tài hướng đến giải quyết. Cách tiếp cận toàn diện này giúp đặt đề tài vào đúng bối cảnh phát triển của lĩnh vực, đồng thời làm rõ tính mới và đóng góp kỳ vọng của nghiên cứu.
+Chương này tổng hợp và phân tích các công trình nghiên cứu tiêu biểu cùng các hệ thống thực tế liên quan đến bài toán phân tích và dự báo giao thông đô thị. Mục tiêu của chương không chỉ dừng lại ở việc liệt kê các hướng tiếp cận đã có, mà còn làm rõ tiến trình phát triển tư duy mô hình hóa giao thông, những giới hạn tồn tại, và cơ sở khoa học cho hướng tiếp cận mà đề tài lựa chọn.
+
+Nội dung được tổ chức theo ba trục chính: (i) các mô hình truyền thống và thống kê mô tả cơ chế lan truyền tắc nghẽn; (ii) các mô hình học sâu trên đồ thị, đặc biệt là sự chuyển dịch từ đồ thị tĩnh sang đồ thị động và cơ chế học quan hệ; và (iii) các hệ thống giao thông thực tế, từ đó xác định khoảng trống nghiên cứu mà đề tài hướng đến giải quyết.
 
 \subsection{Các nghiên cứu liên quan}
 
-\subsubsection{Mô hình hóa sự lan truyền và tắc nghẽn giao thông}
+\subsubsection{Mô hình hóa cơ chế lan truyền tắc nghẽn giao thông}
 
-Các nghiên cứu nền tảng trong lĩnh vực giao thông trước thời kỳ học sâu chủ yếu dựa vào mô hình vật lý và thống kê nhằm mô tả bản chất lan truyền của dòng chảy giao thông. Những mô hình này giải thích cách tắc nghẽn hình thành, khuếch tán theo thời gian và ảnh hưởng lên các khu vực lân cận.
+Trước khi học sâu trở thành xu hướng chủ đạo, nhiều nghiên cứu trong lĩnh vực giao thông tập trung vào việc mô hình hóa bản chất vật lý và thống kê của dòng chảy giao thông. Các công trình này đặt nền móng quan trọng cho việc hiểu tắc nghẽn không chỉ là hiện tượng cục bộ, mà là một quá trình lan truyền có cấu trúc trong không gian và thời gian.
 
-\subsubsubsection{Mô hình lan truyền sóng (Wave Propagation Models)}
+\subsubsubsection{Mô hình lan truyền dạng sóng}
 
-Jiang và cộng sự nghiên cứu dữ liệu cảm biến tại Bắc Kinh và Thâm Quyến, qua đó xác định các \textit{jam centers}. Nhóm tác giả chỉ ra rằng tắc nghẽn lan truyền theo dạng sóng với vận tốc xấp xỉ $30 \pm 10$ km/h và cường độ suy giảm tuyến tính theo khoảng cách. Nghiên cứu cung cấp cơ sở thực nghiệm quan trọng giúp mô hình hóa tính chất không gian của tắc nghẽn.
+Jiang và cộng sự, thông qua phân tích dữ liệu cảm biến giao thông tại các đô thị lớn như Bắc Kinh và Thâm Quyến, đã xác định sự tồn tại của các \textit{jam centers} – những tâm điểm khởi phát tắc nghẽn. Nghiên cứu chỉ ra rằng tắc nghẽn lan truyền theo dạng sóng với vận tốc tương đối ổn định (khoảng $30 \pm 10$ km/h) và cường độ suy giảm theo khoảng cách.
 
-\subsubsubsection{Mô hình lây lan (Contagion Process Models)}
+Đóng góp cốt lõi của hướng tiếp cận này là cung cấp bằng chứng thực nghiệm cho tính \emph{không gian} của tắc nghẽn, tuy nhiên các mô hình dạng sóng thường mang tính mô tả vĩ mô và khó mở rộng để dự báo chi tiết trên mạng lưới giao thông phức tạp.
 
-Saberi và cộng sự tiếp cận theo hướng mô phỏng tắc nghẽn giao thông như một dạng bệnh dịch lây lan. Sử dụng mô hình SIR (Susceptible--Infected--Recovered), họ mô tả trạng thái ``nhiễm tắc nghẽn'' và ``hồi phục'' của các đoạn đường theo thời gian. Mô hình này hiệu quả ở cấp độ vĩ mô nhưng thiếu khả năng mô tả đặc trưng vi mô tại từng nút giao thông.
+\subsubsubsection{Mô hình lây lan và quá trình lan truyền}
 
-\subsubsubsection{Xác định nút thắt cổ chai (Bottleneck Detection)}
+Saberi và cộng sự tiếp cận bài toán theo hướng xem tắc nghẽn như một quá trình lây lan, tương tự dịch bệnh, sử dụng các mô hình SIR để mô tả trạng thái của từng đoạn đường theo thời gian. Cách tiếp cận này cho phép phân tích động lực lan truyền trên toàn mạng lưới và làm rõ vai trò của tương tác liên vùng.
 
-Li và cộng sự đề xuất phương pháp dựa trên lý thuyết đồ thị và chuỗi Markov nhằm xác định các nút thắt cổ chai dựa trên ``chi phí tắc nghẽn''. Chi phí này phản ánh không chỉ mức độ tắc tại một điểm mà còn khả năng lan truyền sang các đoạn khác. Đây là tư tưởng quan trọng được kế thừa trong đề tài khi đánh giá tác động liên vùng của các nút giao thông.
+Tuy nhiên, các mô hình lây lan cổ điển thường giả định quan hệ giữa các nút là cố định hoặc đơn giản, chưa đủ linh hoạt để phản ánh sự biến đổi nhanh và phi tuyến của giao thông đô thị hiện đại.
 
-\subsubsection{Các mô hình Deep Learning với Ma trận kề tĩnh (Static Graph)}
+\subsubsubsection{Xác định tuyến và nút ảnh hưởng}
 
-Sự phát triển của Graph Convolutional Networks (GCN) mở ra phương pháp khai thác cấu trúc topo của mạng lưới giao thông để phục vụ dự báo.
+Một hướng nghiên cứu quan trọng khác tập trung vào việc xác định các tuyến đường hoặc nút giao thông có mức độ ảnh hưởng lớn đến toàn mạng lưới. Công trình về \textit{Most Influential Routes} đề xuất khái niệm ``độ ảnh hưởng'' của một tuyến, không chỉ dựa trên mức độ tắc nghẽn tại chính nó, mà còn dựa trên khả năng gây ảnh hưởng lan truyền sang các tuyến khác.
 
-\subsubsubsection{T-GCN}
+Tư tưởng cốt lõi của hướng tiếp cận này là chuyển trọng tâm từ dự báo giá trị (ví dụ: tốc độ, lưu lượng) sang phân tích \emph{tác động và lan truyền}, đây là tiền đề quan trọng cho các mô hình đồ thị học quan hệ trong đề tài.
 
-Mô hình T-GCN kết hợp GCN và GRU để xử lý đồng thời thông tin không gian--thời gian. 
+\subsection{Các mô hình học sâu trên đồ thị giao thông}
 
-\begin{itemize}
-    \item \textbf{Ưu điểm:} T-GCN vượt trội hơn các mô hình truyền thống như ARIMA hay SVR nhờ học trực tiếp đặc trưng topo của mạng lưới.
-    \item \textbf{Hạn chế:} Ma trận kề $A$ được xây dựng tĩnh dựa trên khoảng cách hoặc kết nối vật lý, không phản ánh tính động của mối quan hệ giao thông theo thời gian.
-\end{itemize}
+\subsubsection{Đồ thị tĩnh và các mô hình GCN truyền thống}
 
-\subsubsubsection{ST-GCN, DCRNN và các biến thể}
+Sự xuất hiện của Graph Convolutional Networks (GCN) đánh dấu bước tiến lớn trong việc khai thác cấu trúc topo của mạng lưới giao thông. Các mô hình như T-GCN, ST-GCN hay DCRNN kết hợp GCN với các mô hình chuỗi thời gian (GRU, LSTM) để học đồng thời thông tin không gian và thời gian.
 
-Các mô hình ST-GCN và DCRNN xử lý tốt hơn cơ chế khuếch tán, nhưng vẫn dựa trên đồ thị tĩnh đã được xác định trước. Điều này làm giảm hiệu quả trong bối cảnh giao thông phức tạp khi các mối quan hệ có thể thay đổi theo giờ cao điểm, sự cố, hoặc các yếu tố ngẫu nhiên khác.
+Các mô hình này cho thấy hiệu quả vượt trội so với các phương pháp thống kê truyền thống. Tuy nhiên, điểm hạn chế mang tính cấu trúc là ma trận kề thường được xây dựng tĩnh, dựa trên khoảng cách địa lý hoặc kết nối vật lý, và không thay đổi theo thời gian. Giả định này không còn phù hợp trong bối cảnh giao thông đô thị phức tạp, nơi mối quan hệ giữa các nút có thể biến đổi mạnh theo giờ cao điểm, sự cố, hoặc hành vi người tham gia giao thông.
 
-\subsubsection{Các mô hình Deep Learning với Ma trận kề động (Dynamic Graph Learning)}
+\subsubsection{Học quan hệ động và Attention trên đồ thị}
 
-Nhằm khắc phục hạn chế của đồ thị tĩnh, các nghiên cứu gần đây tập trung vào xây dựng ma trận kề động, cập nhật theo từng thời điểm dựa trên dữ liệu thực nghiệm.
+Nhằm khắc phục hạn chế của đồ thị tĩnh, nhiều nghiên cứu gần đây tập trung vào học ma trận kề động dựa trên dữ liệu quan sát. Các mô hình như DTC-STGCN cập nhật quan hệ giữa các nút theo thời gian thông qua tương quan hoặc thống kê động, cho thấy cải thiện đáng kể về độ chính xác dự báo.
 
-\subsubsubsection{DTC-STGCN}
+Song song đó, cơ chế Attention và Graph Attention Networks (GAT) cho phép mô hình tự động học trọng số ảnh hưởng giữa các nút mà không cần định nghĩa ma trận kề cố định. Điều này đặc biệt phù hợp với các đô thị có cấu trúc giao thông phức tạp, nơi tồn tại nhiều \emph{kết nối ngữ nghĩa} không thể hiện trực tiếp qua topo vật lý.
 
-Xu và cộng sự đề xuất mô hình DTC-STGCN, trong đó ma trận kề được tính toán động dựa trên tương quan giữa các nút qua từng thời điểm. Kết quả cho thấy độ chính xác dự báo tăng đáng kể nhờ mô hình hóa đúng bản chất thay đổi của mạng lưới giao thông.
+\subsubsection{Transformer cho biểu diễn đồ thị}
 
-\subsubsubsection{Attention và Graph Attention Networks (GAT)}
+Công trình ``Do Transformers Really Perform Badly for Graph Representation?'' (NeurIPS 2021) đặt lại câu hỏi về vai trò của Transformer trong học biểu diễn đồ thị. Nghiên cứu chỉ ra rằng, khi được thiết kế phù hợp với inductive bias của đồ thị, Transformer không những không kém hơn GCN mà còn có khả năng học quan hệ dài hạn và linh hoạt hơn.
 
-Cơ chế Attention giúp mô hình tự động học trọng số giữa các nút mà không cần ma trận kề định sẵn. Điều này đặc biệt phù hợp với bối cảnh TP.HCM, nơi tồn tại nhiều \textit{kết nối ngữ nghĩa} (semantic connections) không thể hiện bằng kết nối vật lý, ví dụ các nút giao thông xa nhau nhưng cùng nằm trên một luồng di chuyển chủ đạo.
+Kết luận này có ý nghĩa quan trọng đối với bài toán giao thông: lan truyền tắc nghẽn không chỉ phụ thuộc vào các nút lân cận trực tiếp, mà còn chịu ảnh hưởng của các tuyến xa hơn thông qua các luồng di chuyển chủ đạo. Điều này mở ra hướng tiếp cận kết hợp tư tưởng Attention/Transformer với đồ thị giao thông động, thay vì chỉ dựa vào convolution cục bộ.
 
-\subsection{Các hệ thống và nền tảng thực tế}
+\subsection{Các hệ thống và nền tảng giao thông thực tế}
 
-\subsubsection{Google Maps và Waze}
+Các hệ thống như Google Maps, Waze, TomTom hay HERE đã chứng minh khả năng dự báo giao thông thời gian thực ở quy mô lớn. Tuy nhiên, phần lớn các hệ thống này hoạt động như ``hộp đen'', tập trung vào cung cấp kết quả điều hướng hoặc ETA, thay vì hỗ trợ phân tích cơ chế lan truyền và mức độ ảnh hưởng giữa các nút giao thông.
 
-Hai hệ thống này sử dụng dữ liệu khổng lồ từ cộng đồng, áp dụng các mô hình AI độ chính xác cao để dự báo thời gian thực. Tuy nhiên, chúng hoạt động như \textit{hộp đen}:
-\begin{itemize}
-    \item Không cung cấp khả năng phân tích nguyên nhân tắc nghẽn.
-    \item Không hỗ trợ đánh giá mức độ lan truyền giữa các nút.
-    \item Không phù hợp cho mục tiêu tối ưu hoá quản lý giao thông cấp thành phố.
-\end{itemize}
+Đối với các nền tảng giám sát nội địa như UTraffic, hệ thống hiện tại chủ yếu dừng ở mức thu thập và hiển thị dữ liệu, chưa khai thác sâu tiềm năng của các mô hình học sâu để dự báo dài hạn và giải thích hiện tượng tắc nghẽn.
 
-\subsubsection{TomTom, Mapbox và các nền tảng bản đồ thương mại khác}
+\subsection{Khoảng trống nghiên cứu}
 
-Bên cạnh Google Maps và Waze, còn có nhiều nền tảng bản đồ thương mại và dịch vụ dữ liệu giao thông chuyên sâu đóng vai trò quan trọng trong hệ sinh thái giao thông thông minh, tiêu biểu là TomTom, Mapbox, HERE, và INRIX. Các nền tảng này cung cấp tập hợp dịch vụ, API và dữ liệu có thể hỗ trợ cả ứng dụng điều hướng thương mại lẫn phân tích chuyên sâu cho nhà quản lý giao thông.
-
-\paragraph{TomTom}
-\begin{itemize}
-    \item \textbf{Tính năng:} Cung cấp routing, traffic flow, traffic incidents, historical traffic, và map tiles. Hệ thống có dữ liệu thời gian thực và dữ liệu lịch sử được chuẩn hóa cho mục đích phân tích.
-    \item \textbf{Nguồn dữ liệu:} Kết hợp dữ liệu cảm biến, probe data (điểm đo từ phương tiện), và hợp tác với nhà cung cấp địa phương.
-    \item \textbf{Ưu điểm:} Chất lượng dữ liệu dành cho routing và dự báo thời gian đến (ETA) tốt; có các API chuyên nghiệp, SLA cho doanh nghiệp.
-    \item \textbf{Hạn chế:} Dữ liệu thương mại (giấy phép) — chi phí có thể cao cho quy mô toàn thành phố; hạn chế về minh bạch (khó truy xuất nguồn gốc chi tiết từng điểm dữ liệu).
-\end{itemize}
-
-\paragraph{Mapbox}
-\begin{itemize}
-    \item \textbf{Tính năng:} Cung cấp công cụ hiển thị bản đồ (map rendering), vector tiles, routing, traffic overlays, và SDK cho frontend (web/mobile). Hỗ trợ tùy biến bản đồ cao, phù hợp cho dashboard và trực quan hoá.
-    \item \textbf{Nguồn dữ liệu:} Kết hợp OpenStreetMap, dữ liệu đối tác, và các dịch vụ traffic provider để hiển thị trạng thái giao thông.
-    \item \textbf{Ưu điểm:} Khả năng tuỳ biến giao diện bản đồ mạnh — phù hợp cho hệ thống giám sát và dashboard; dễ tích hợp với stack React/Deck.gl để hiển thị dữ liệu lớn.
-    \item \textbf{Hạn chế:} Mapbox chủ yếu tập trung vào visualization và SDK — phần dữ liệu traffic chi tiết và phân tích nâng cao thường phụ thuộc vào nguồn bên thứ ba hoặc phải trả phí.
-\end{itemize}
-
-\paragraph{HERE Technologies}
-\begin{itemize}
-    \item \textbf{Tính năng:} Dịch vụ bản đồ, routing, traffic flow, incidents, map-matching, và rich telemetry. HERE có các API dành cho doanh nghiệp và hỗ trợ phân tích lịch sử/real-time.
-    \item \textbf{Ưu điểm:} Strong enterprise features, hợp đồng dữ liệu cho thành phố, hỗ trợ map-matching chính xác — hữu ích khi kết hợp dữ liệu GPS/OBD.
-    \item \textbf{Hạn chế:} Tương tự TomTom — chi phí và tính thương mại của dữ liệu cần cân nhắc.
-\end{itemize}
-
-\paragraph{INRIX}
-\begin{itemize}
-    \item \textbf{Tính năng:} Chuyên về dữ liệu lưu lượng và phân tích tắc nghẽn; cung cấp chỉ số congestion, travel time index, historical trend reports.
-    \item \textbf{Ưu điểm:} Dữ liệu phân tích chuyên sâu, thuận lợi cho hoạch định chính sách và nghiên cứu dài hạn.
-    \item \textbf{Hạn chế:} Chi phí bản quyền, không phải giải pháp “plug-and-play” cho các ứng dụng nhỏ.
-\end{itemize}
-
-\subsubsection*{So sánh ngắn gọn và vai trò trong hệ thống quản lý giao thông đô thị}
-
-\begin{itemize}
-    \item \textbf{Ứng dụng cho điều phối thành phố:} TomTom, HERE, và INRIX cung cấp dữ liệu và API đủ mạnh để phục vụ phân tích và báo cáo cấp thành phố (ví dụ: phân tích xu hướng, báo cáo tắc nghẽn theo chu kỳ). Tuy nhiên các dữ liệu này thường cần mua bản quyền và tích hợp bổ sung để phục vụ mục tiêu “giải thích lan truyền” (causal/spatio-temporal influence).
-    \item \textbf{Ứng dụng cho trực quan hoá và giao diện:} Mapbox là lựa chọn thuận tiện để xây dựng dashboard tương tác và trực quan hoá dữ liệu thời gian thực (kết hợp với React, Deck.gl, hoặc Kepler.gl).
-    \item \textbf{Tính mở và tích hợp với hệ thống nội bộ:} Nếu mục tiêu là nghiên cứu khoa học và mô hình hoá chi tiết (ví dụ: xây dựng ma trận kề động, chạy lại mô hình trên dữ liệu lịch sử), cần kết hợp dữ liệu thương mại này với nguồn nội địa (camera, loop detectors, GPS probe) và lưu trữ trong TimescaleDB/PostGIS. Dữ liệu thương mại nên được xem như \emph{một nguồn bổ trợ} chứ không thay thế hoàn toàn dữ liệu cảm biến tại chỗ.
-    \item \textbf{Chi phí và pháp lý:} Các dịch vụ thương mại yêu cầu hợp đồng bản quyền và có thể giới hạn quyền sử dụng dữ liệu cho mục đích nghiên cứu/tái phân phối — yếu tố cần cân nhắc khi thiết kế kiến trúc dữ liệu mở cho thành phố.
-\end{itemize}
-
-\subsubsection{UTraffic}
-
-UTraffic là nền tảng giám sát giao thông thời gian thực thông qua camera và cảm biến. Hệ thống đang thực hiện tốt chức năng giám sát, nhưng vẫn còn khoảng trống lớn trong:
-\begin{itemize}
-    \item phân tích sâu (deep analysis),
-    \item dự báo thời gian dài,
-    \item và mô hình hóa lan truyền tắc nghẽn.
-\end{itemize}
-
-\subsection{Khoảng trống nghiên cứu (Gap Analysis)}
-
-Dựa trên tổng quan các công trình và hệ thống thực tế, có thể xác định ba khoảng trống chính:
+Từ tổng quan trên, có thể xác định ba khoảng trống nghiên cứu chính:
 
 \begin{enumerate}
-    \item \textbf{Hạn chế của ma trận kề tĩnh:} Các mô hình hiện tại như T-GCN vẫn sử dụng đồ thị tĩnh, không phản ánh đúng mối quan hệ động giữa các nút giao thông trong các đô thị phức tạp như TP.HCM.
-    
-    \item \textbf{Thiếu nghiên cứu cho giao thông hỗn hợp:} Phần lớn công trình quốc tế nghiên cứu trên dữ liệu ô tô hoặc taxi, vốn có luồng di chuyển tổ chức. TP.HCM lại có đặc thù xe máy chiếm đa số, tạo ra tính hỗn loạn (chaotic) cao.
-    
-    \item \textbf{Nhu cầu chuyển từ dự báo sang giải thích:} Các mô hình hiện tại chủ yếu báo trước tắc nghẽn, nhưng chưa giải thích được cơ chế lan truyền và mức độ ảnh hưởng giữa các nút -- điều cần thiết cho hoạch định chiến lược.
+    \item \textbf{Giới hạn của đồ thị tĩnh}: Phần lớn các mô hình hiện tại chưa phản ánh được tính động và phi tuyến của quan hệ giao thông.
+    \item \textbf{Thiếu phân tích lan truyền và ảnh hưởng}: Nhiều mô hình tập trung vào dự báo giá trị cục bộ, nhưng chưa làm rõ vai trò ảnh hưởng liên vùng của các tuyến và nút giao thông.
+    \item \textbf{Khoảng cách giữa dự báo và giải thích}: Các hệ thống thực tế mạnh về dự báo nhưng yếu về khả năng giải thích và hỗ trợ ra quyết định chiến lược.
 \end{enumerate}
 
+\newpage
 \subsection*{Tóm tắt}
 
-Chương này đã phân tích toàn diện các công trình nghiên cứu và hệ thống thực tế trong lĩnh vực giao thông. Những khoảng trống được xác định là cơ sở quan trọng để đề tài lựa chọn hướng tiếp cận: \textbf{cải tiến T-GCN bằng cơ chế học ma trận kề động (Dynamic Graph Learning)}, từ đó nâng cao khả năng dự báo và phân tích lan truyền tắc nghẽn trên dữ liệu giao thông thực tế tại TP.HCM.
-
+Chương này đã đặt nền tảng lý thuyết và thực tiễn cho đề tài bằng cách phân tích tiến trình phát triển từ các mô hình lan truyền truyền thống đến các mô hình học sâu trên đồ thị và Attention. Dựa trên các khoảng trống được xác định, đề tài lựa chọn hướng tiếp cận kết hợp tư tưởng \textbf{lan truyền ảnh hưởng trên mạng giao thông} và \textbf{học quan hệ động bằng cơ chế Attention/Transformer}, nhằm nâng cao đồng thời khả năng dự báo và giải thích tắc nghẽn giao thông đô thị.

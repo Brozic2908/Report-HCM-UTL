@@ -1,5 +1,5 @@
-% Bổ sung vào Chương 2 - sau phần 2.4 (Các cải tiến hiện đại)
-
+% Bổ sung vào Chương 2 - sau phần lý thuyết BERT
+\newpage
 \subsection{Công nghệ nền tảng và framework}
 
 \subsubsection{Python và hệ sinh thái Deep Learning}
@@ -8,21 +8,15 @@
 
 Python đã trở thành ngôn ngữ lập trình tiêu chuẩn cho các ứng dụng Machine Learning và Deep Learning nhờ tính đơn giản, dễ học và hệ sinh thái thư viện phong phú. Đối với bài toán dự báo giao thông, Python cung cấp đầy đủ công cụ từ xử lý dữ liệu, huấn luyện mô hình đến triển khai sản phẩm.
 
-Các ưu điểm chính bao gồm cú pháp rõ ràng giúp code dễ đọc và bảo trì, thư viện phong phú như NumPy, Pandas, Scikit-learn, PyTorch, TensorFlow, cộng đồng lớn hỗ trợ tốt, và khả năng tích hợp với nhiều hệ thống và database khác nhau.
+Các ưu điểm chính bao gồm cú pháp rõ ràng giúp code dễ đọc và bảo trì, thư viện phong phú như NumPy, Pandas, Scikit-learn, PyTorch, TensorFlow, Transformers, cộng đồng lớn hỗ trợ tốt, và khả năng tích hợp với nhiều hệ thống và database khác nhau.
 
-\subsubsubsection{PyTorch và PyTorch Geometric}
+\subsubsubsection{PyTorch}
 
 \textbf{PyTorch Core}
 
-PyTorch là framework deep learning được phát triển bởi Meta AI, nổi bật với cơ chế dynamic computational graph cho phép debug và thử nghiệm linh hoạt. PyTorch cung cấp các thành phần cốt lõi như tensor operations với hỗ trợ GPU, module system để xây dựng mạng neural network, các thuật toán tối ưu (Adam, SGD, RMSprop), và cơ chế automatic differentiation cho backpropagation.
+PyTorch là framework deep learning được phát triển bởi Meta AI, nổi bật với cơ chế dynamic computational graph cho phép debug và thử nghiệm linh hoạt. PyTorch cung cấp các thành phần cốt lõi như tensor operations với hỗ trợ GPU, module system để xây dựng mạng neural network, các thuật toán tối ưu (AdamW, SGD, RMSprop), và cơ chế automatic differentiation cho backpropagation.
 
 Kiến trúc của PyTorch được thiết kế theo nguyên tắc modular, cho phép research scientists dễ dàng thử nghiệm các ý tưởng mới trong khi vẫn đảm bảo hiệu năng cao khi triển khai production.
-
-\textbf{PyTorch Geometric (PyG)}
-
-PyTorch Geometric là thư viện mở rộng chuyên biệt cho Graph Neural Networks, cung cấp các cấu trúc dữ liệu tối ưu cho đồ thị, message passing framework để truyền thông điệp giữa các nút, các lớp GNN được cài đặt sẵn (GCNConv, GATConv, SAGEConv, GraphConv), cơ chế xử lý batch cho nhiều đồ thị đồng thời, và các tiện ích như sampling, pooling, normalization.
-
-PyG đặc biệt phù hợp cho bài toán giao thông vì có khả năng biểu diễn tự nhiên mạng lưới đường, hiệu năng cao nhờ sparse matrix operations, dễ dàng thử nghiệm các kiến trúc GNN khác nhau, và hỗ trợ GPU acceleration cho đồ thị lớn.
 
 \subsubsection{Kiến trúc Kappa cho xử lý dữ liệu streaming}
 
@@ -31,48 +25,25 @@ PyG đặc biệt phù hợp cho bài toán giao thông vì có khả năng bi�
 Kiến trúc Kappa là một mô hình xử lý dữ liệu hiện đại được đề xuất bởi Jay Kreps (LinkedIn) như một giải pháp đơn giản hóa so với Lambda Architecture truyền thống. Khác với Lambda Architecture có hai đường xử lý riêng biệt (batch và stream), Kappa Architecture chỉ sử dụng một đường xử lý streaming duy nhất, giảm độ phức tạp và chi phí bảo trì.
 
 \begin{figure}[h]
-\centering
-\begin{tikzpicture}[node distance=2cm, scale=0.85, transform shape]
-% Data Sources
-\node[draw, rectangle, minimum width=2.5cm] (sources) {Data Sources};
-
-% Message Queue
-\node[draw, rectangle, minimum width=3cm, below of=sources, yshift=-0.5cm] (kafka) {Kafka/Message Queue};
-
-% Stream Processing
-\node[draw, rectangle, minimum width=3cm, below of=kafka, yshift=-0.5cm] (stream) {Stream Processing Layer};
-
-% Serving Layer
-\node[draw, rectangle, minimum width=3cm, below of=stream, yshift=-0.5cm] (serving) {Serving Layer};
-
-% Storage
-\node[draw, rectangle, minimum width=2.5cm, right of=stream, xshift=3cm] (storage) {Long-term Storage};
-
-% Arrows
-\draw[->] (sources) -- (kafka);
-\draw[->] (kafka) -- (stream);
-\draw[->] (stream) -- (serving);
-\draw[->] (stream) -- (storage);
-\draw[->] (kafka) edge[bend right] (storage);
-
-% Labels
-\node[right of=kafka, xshift=1.5cm, text width=3cm] {Real-time ingestion};
-\node[right of=stream, xshift=1.5cm, text width=3cm] {Unified processing};
-\end{tikzpicture}
-\caption{Kiến trúc Kappa}
-\label{fig:kappa_architecture}
+    \centering
+    \includegraphics[width=1\textwidth]{Images/kappa_bert_architecture.png}
+    \caption{Kiến trúc Kappa với BERT Model Integration}
+    \label{fig:kappa_bert}
 \end{figure}
+
 
 \textbf{Các thành phần chính:}
 
 \begin{enumerate}
     \item \textbf{Message Queue (Kafka)}: Nhận và lưu trữ tất cả dữ liệu đầu vào dưới dạng event log bất biến. Kafka đóng vai trò là single source of truth, cho phép replay dữ liệu khi cần thiết.
     
-    \item \textbf{Stream Processing Layer}: Xử lý dữ liệu theo thời gian thực, thực hiện transformations, aggregations, và tính toán. Tất cả logic xử lý đều nằm trong lớp này.
+    \item \textbf{Stream Processing Layer}: Xử lý dữ liệu theo thời gian thực, thực hiện transformations, aggregations, và feature engineering cho BERT model.
     
-    \item \textbf{Serving Layer}: Lưu trữ kết quả đã được xử lý, phục vụ các truy vấn từ applications và users.
+    \item \textbf{ML Model Inference}: BERT model được deploy để thực hiện prediction trên streaming data.
     
-    \item \textbf{Long-term Storage}: Lưu trữ dữ liệu lịch sử cho mục đích phân tích, audit, và reprocessing.
+    \item \textbf{Serving Layer}: Lưu trữ kết quả prediction và phục vụ các truy vấn từ applications.
+    
+    \item \textbf{Long-term Storage}: Lưu trữ dữ liệu lịch sử cho mục đích retraining model và analysis.
 \end{enumerate}
 
 \subsubsubsection{Apache Kafka làm backbone}
@@ -101,34 +72,6 @@ Apache Kafka là distributed streaming platform đóng vai trò trung tâm trong
     \item \textbf{Scalability}: Dễ dàng scale horizontal bằng cách thêm brokers và partitions
     \item \textbf{Replay Capability}: Có thể đọc lại dữ liệu lịch sử để recompute hoặc fix bugs
     \item \textbf{Low Latency}: Độ trễ chỉ vài milliseconds, phù hợp cho real-time applications
-\end{itemize}
-
-\subsubsubsection{Apache Flink cho Stream Processing}
-
-Apache Flink là distributed stream processing framework được thiết kế đặc biệt cho xử lý streaming với độ trễ thấp và khả năng xử lý stateful phức tạp.
-
-\textbf{Đặc điểm nổi bật:}
-
-\begin{enumerate}
-    \item \textbf{True Streaming}: Khác với Spark Streaming (micro-batch), Flink xử lý từng event một, đạt độ trễ thấp hơn.
-    
-    \item \textbf{Event Time Processing}: Xử lý dựa trên thời gian event xảy ra thực tế, không phải thời gian xử lý. Điều này quan trọng khi dữ liệu đến không đúng thứ tự.
-    
-    \item \textbf{Stateful Computations}: Flink quản lý state một cách hiệu quả, cho phép thực hiện các phép tính phức tạp như windowing, aggregations, pattern detection.
-    
-    \item \textbf{Exactly-Once Semantics}: Đảm bảo mỗi event được xử lý đúng một lần, ngay cả khi có failures.
-    
-    \item \textbf{Fault Tolerance}: Cơ chế checkpointing tự động để recovery khi có lỗi.
-\end{enumerate}
-
-\textbf{Windowing trong Flink:}
-
-Flink hỗ trợ nhiều loại windows để tổng hợp dữ liệu streaming:
-\begin{itemize}
-    \item \textbf{Tumbling Windows}: Các window không chồng lấp, kích thước cố định (ví dụ: 5 phút)
-    \item \textbf{Sliding Windows}: Các window chồng lấp, phù hợp cho moving averages
-    \item \textbf{Session Windows}: Window dựa trên khoảng idle time giữa các events
-    \item \textbf{Global Windows}: Window toàn cục với custom triggers
 \end{itemize}
 
 \subsubsubsection{So sánh Kappa với Lambda Architecture}
@@ -169,7 +112,7 @@ Trong bài toán phân tích giao thông, Kappa Architecture phù hợp vì:
 
 \begin{enumerate}
     \item Cảm biến giao thông (camera, loop detectors, GPS) publish data vào Kafka topics
-    \item Flink consumers đọc từ Kafka, thực hiện:
+    \item Consumers đọc từ Kafka, thực hiện:
     \begin{itemize}
         \item Data cleaning và validation
         \item Feature extraction (tốc độ, volume, occupancy)
@@ -179,15 +122,11 @@ Trong bài toán phân tích giao thông, Kappa Architecture phù hợp vì:
     \end{itemize}
     \item Kết quả được ghi vào:
     \begin{itemize}
-        \item Redis (serving layer cho low-latency queries)
-        \item PostgreSQL (structured data và spatial queries)
-        \item Time-series database (historical analysis)
+        \item \textbf{Apache Parquet} (định dạng lưu trữ cột cho phân tích dữ liệu quy mô lớn)
     \end{itemize}
     \item ML models subscribe processed data để thực hiện predictions
     \item Results được publish lại vào Kafka để downstream services consume
 \end{enumerate}
-
-\newpage
 \subsubsection{TomTom Historical Traffic Stats API}
 
 TomTom cung cấp dữ liệu giao thông lịch sử với độ bao phủ cao, bao gồm tốc độ trung bình, mức độ tắc nghẽn và chỉ số độ trễ theo từng đoạn đường. Dữ liệu được tổng hợp từ nhiều nguồn GPS và cập nhật theo khoảng thời gian từ 1--5 phút.
@@ -215,151 +154,91 @@ Dữ liệu lịch sử từ TomTom giúp:
 
 \subsubsection{Cơ sở dữ liệu và lưu trữ}
 
-\subsubsubsection{PostgreSQL với PostGIS}
+\subsubsubsection{Lưu trữ dữ liệu dạng cột với Apache Parquet}
 
-PostgreSQL là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở mạnh mẽ, nổi tiếng với tính ổn định, tuân thủ chuẩn ACID, và khả năng mở rộng thông qua extensions. PostGIS là extension quan trọng bổ sung khả năng xử lý dữ liệu không gian địa lý (spatial data).
+Trong hệ thống phân tích giao thông đô thị, dữ liệu đầu vào có đặc trưng khối lượng lớn, cấu trúc rõ ràng và chủ yếu phục vụ cho các tác vụ phân tích, thống kê và huấn luyện mô hình học máy. Do đó, hệ thống lựa chọn \textbf{Apache Parquet} làm định dạng lưu trữ chính thay vì cơ sở dữ liệu giao dịch truyền thống.
 
-\textbf{Tính năng quan trọng cho giao thông:}
+Parquet là định dạng lưu trữ dạng cột (columnar storage), được thiết kế tối ưu cho các hệ thống phân tích dữ liệu lớn (Big Data Analytics) và các workload đọc nhiều, ghi ít.
 
-\begin{itemize}
-    \item \textbf{Spatial Indexing}: R-tree và GiST index giúp tăng tốc độ truy vấn không gian lên hàng nghìn lần
-    \item \textbf{Geometric Operations}: Tính toán khoảng cách, giao điểm, buffer zones, containment
-    \item \textbf{Topology}: Phân tích mạng lưới đường với topology rules
-    \item \textbf{Routing Extensions}: pgRouting hỗ trợ tìm đường đi ngắn nhất, TSP, isochrones
-    \item \textbf{Geographic Coordinate System}: Hỗ trợ nhiều hệ tọa độ, transformations
-\end{itemize}
-
-PostGIS cho phép lưu trữ và truy vấn hiệu quả các thực thể giao thông như nodes, edges, polygons (khu vực), và thực hiện các phân tích không gian phức tạp như tìm các nút trong bán kính, tính toán shortest path, phân tích clustering.
-
-\subsubsubsection{TimescaleDB}
-
-TimescaleDB là extension của PostgreSQL được tối ưu hóa đặc biệt cho time-series data. Nó kế thừa toàn bộ tính năng của PostgreSQL nhưng thêm các khả năng chuyên biệt cho dữ liệu chuỗi thời gian.
-
-\textbf{Tính năng chính:}
+\textbf{Các đặc điểm kỹ thuật chính của Parquet:}
 
 \begin{itemize}
-    \item \textbf{Automatic Partitioning}: Tự động chia dữ liệu thành chunks theo thời gian
-    \item \textbf{Compression}: Nén dữ liệu lịch sử với tỷ lệ cao (10-20x), tiết kiệm storage
-    \item \textbf{Continuous Aggregates}: Materialized views tự động cập nhật cho aggregations
-    \item \textbf{Retention Policies}: Tự động xóa dữ liệu cũ theo policy định sẵn
-    \item \textbf{Time-based Queries}: Tối ưu hóa queries theo time range
+    \item \textbf{Columnar Storage}: Dữ liệu được lưu theo cột thay vì theo hàng, giúp giảm lượng dữ liệu cần đọc khi chỉ truy vấn một số thuộc tính cụ thể (ví dụ: tốc độ, lưu lượng, thời gian).
+    
+    \item \textbf{Efficient Compression}: Parquet hỗ trợ nhiều thuật toán nén (Snappy, ZSTD, GZIP), tận dụng tính đồng nhất của dữ liệu trong cùng một cột để đạt tỷ lệ nén cao, giảm đáng kể dung lượng lưu trữ.
+    
+    \item \textbf{Predicate Pushdown}: Cho phép loại bỏ sớm các block dữ liệu không thỏa điều kiện truy vấn, giúp tăng tốc độ xử lý.
+    
+    \item \textbf{Schema Evolution}: Hỗ trợ thay đổi schema theo thời gian (thêm/bớt cột) mà không làm hỏng dữ liệu cũ, phù hợp với dữ liệu giao thông có thể mở rộng thuộc tính.
+    
+    \item \textbf{Cross-platform Compatibility}: Tương thích tốt với các hệ sinh thái phân tích như Apache Spark, Pandas, DuckDB và các thư viện học máy.
 \end{itemize}
 
-Đối với dữ liệu giao thông với millions of readings mỗi ngày, TimescaleDB cung cấp performance tốt hơn traditional RDBMS khi truy vấn theo time windows, đồng thời vẫn giữ được khả năng JOIN với spatial data trong PostGIS.
 
-\subsubsubsection{Redis}
 
-Redis là in-memory data store hoạt động như cache layer và message broker với hiệu năng cực cao (sub-millisecond latency).
+\subsubsubsection{Ứng dụng Parquet trong hệ thống giao thông}
 
-\textbf{Vai trò trong hệ thống giao thống:}
+Trong hệ thống đề xuất, Parquet được sử dụng để lưu trữ các tập dữ liệu giao thông đã qua xử lý (processed data), bao gồm:
 
-\begin{enumerate}
-    \item \textbf{Caching Layer}: 
-    \begin{itemize}
-        \item Cache kết quả dự đoán cho các queries phổ biến
-        \item Cache ma trận tương quan giữa các nodes
-        \item Session storage cho web applications
-    \end{itemize}
-    
-    \item \textbf{Real-time Analytics}:
-    \begin{itemize}
-        \item Counters cho traffic volume
-        \item Leaderboards (busiest intersections)
-        \item HyperLogLog cho cardinality estimation
-    \end{itemize}
-    
-    \item \textbf{Pub/Sub Messaging}:
-    \begin{itemize}
-        \item Broadcast traffic alerts đến multiple clients
-        \item Real-time notifications cho congestion events
-        \item WebSocket message distribution
-    \end{itemize}
-    
-    \item \textbf{Rate Limiting}:
-    \begin{itemize}
-        \item Throttle API requests
-        \item Control sensor data ingestion rate
-    \end{itemize}
-\end{enumerate}
+\begin{itemize}
+    \item Thông tin các đoạn đường (road segments)
+    \item Đặc trưng giao thông theo thời gian (speed, volume, congestion level)
+    \item Dữ liệu đặc trưng đầu vào cho mô hình học máy
+    \item Kết quả dự đoán và thống kê theo từng khung thời gian
+\end{itemize}
 
-Redis hỗ trợ nhiều data structures (strings, hashes, lists, sets, sorted sets, streams) phù hợp cho các use cases khác nhau trong hệ thống giao thông.
-
-\subsubsubsection{Chiến lược lưu trữ phân tầng}
-
-Hệ thống giao thông cần chiến lược lưu trữ đa tầng để cân bằng giữa performance, cost, và retention requirements:
-
-\begin{table}[h]
-\centering
-\caption{Chiến lược lưu trữ phân tầng}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Tầng} & \textbf{Technology} & \textbf{Data Age} & \textbf{Use Case} \\ \hline
-Hot & Redis & < 1 hour & Real-time queries \\ \hline
-Warm & TimescaleDB & 1 hour - 30 days & Recent analysis \\ \hline
-Cold & PostgreSQL + S3 & > 30 days & Historical analysis \\ \hline
-Archive & S3 Glacier & > 1 year & Compliance, audit \\ \hline
-\end{tabular}
-\label{tab:storage_tiers}
-\end{table}
-
+Dữ liệu được tổ chức theo cấu trúc thư mục phân tầng dựa trên thời gian (theo ngày, giờ hoặc batch xử lý), giúp thuận tiện cho việc truy xuất, huấn luyện mô hình và phân tích hậu kỳ.
 \subsubsection{API và Web Development Stack}
 
 \subsubsubsection{FastAPI}
 
-FastAPI là modern web framework cho Python, được thiết kế để xây dựng APIs với hiệu năng cao và developer experience tốt.
+FastAPI là một web framework hiện đại dành cho Python, được thiết kế để xây dựng các dịch vụ API với hiệu năng cao, cú pháp rõ ràng và khả năng mở rộng tốt. Framework này đặc biệt phù hợp cho các hệ thống xử lý dữ liệu và mô hình học máy nhờ khả năng tích hợp chặt chẽ với hệ sinh thái Python.
 
-\textbf{Ưu điểm chính:}
+\textbf{Các đặc điểm kỹ thuật chính của FastAPI:}
 
 \begin{itemize}
-    \item \textbf{High Performance}: Tốc độ ngang ngửa NodeJS và Go nhờ Starlette và Pydantic
-    \item \textbf{Type Safety}: Sử dụng Python type hints cho automatic validation
-    \item \textbf{Async Support}: Native async/await cho concurrent requests
-    \item \textbf{Auto Documentation}: Tự động generate OpenAPI (Swagger) và ReDoc
-    \item \textbf{Dependency Injection}: Clean code architecture với DI system
-    \item \textbf{WebSocket Support}: Real-time communication cho traffic updates
+    \item \textbf{High Performance}: FastAPI được xây dựng trên nền Starlette và Pydantic, cho hiệu năng xử lý cao, đáp ứng tốt các yêu cầu API có tần suất truy cập lớn.
+    
+    \item \textbf{Type-based Validation}: Sử dụng Python type hints để tự động kiểm tra, xác thực và chuyển đổi dữ liệu đầu vào, giúp giảm lỗi và tăng độ tin cậy của hệ thống.
+    
+    \item \textbf{Asynchronous Processing}: Hỗ trợ native \texttt{async/await}, cho phép xử lý đồng thời nhiều request, phù hợp với các pipeline phân tích dữ liệu và inference mô hình.
+    
+    \item \textbf{Automatic API Documentation}: Tự động sinh tài liệu OpenAPI (Swagger) và ReDoc, giúp việc kiểm thử và tích hợp API trở nên thuận tiện.
+    
+    \item \textbf{Modular Architecture}: Dễ dàng tổ chức code theo các module (router, service, schema), phù hợp cho các hệ thống nghiên cứu và phát triển mở rộng.
 \end{itemize}
 
-FastAPI đặc biệt phù hợp cho các API cần xử lý nhiều concurrent connections từ sensors và clients, đồng thời cần response time thấp cho real-time applications.
+Trong hệ thống giao thông được đề xuất, FastAPI đóng vai trò là lớp trung gian cung cấp các API phục vụ:
+\begin{itemize}
+    \item Truy xuất dữ liệu giao thông đã được xử lý và lưu trữ dưới dạng Parquet
+    \item Cung cấp đầu vào và đầu ra cho mô hình học máy
+    \item Kết nối giữa pipeline xử lý dữ liệu và giao diện trực quan
+\end{itemize}
 
-\subsubsubsection{React và Modern Frontend}
+\subsubsubsection{Streamlit}
 
-React là thư viện JavaScript phổ biến nhất để xây dựng user interfaces, đặc biệt là single-page applications (SPA). React sử dụng component-based architecture, cho phép tái sử dụng code và quản lý state hiệu quả.
+Streamlit là framework Python nhẹ, được thiết kế để xây dựng nhanh các ứng dụng web phục vụ trực quan hóa dữ liệu và trình diễn kết quả phân tích mà không cần phát triển frontend phức tạp.
 
-\textbf{Các thư viện quan trọng trong hệ thống giao thông:}
+\textbf{Ưu điểm của Streamlit trong bối cảnh nghiên cứu và đồ án:}
 
-\begin{enumerate}
-    \item \textbf{Mapping Libraries}:
-    \begin{itemize}
-        \item \textbf{Leaflet / React-Leaflet}: Open-source, lightweight, mobile-friendly
-        \item \textbf{Mapbox GL JS}: High-performance vector maps với 3D support
-        \item \textbf{Deck.gl}: WebGL-based visualization cho big data
-    \end{itemize}
+\begin{itemize}
+    \item \textbf{Rapid Prototyping}: Cho phép xây dựng giao diện trực quan chỉ với một lượng nhỏ mã Python, rút ngắn thời gian phát triển.
     
-    \item \textbf{Data Visualization}:
-    \begin{itemize}
-        \item \textbf{D3.js}: Low-level, flexible cho custom visualizations
-        \item \textbf{Recharts}: Composable chart library built on D3
-        \item \textbf{Plotly.js}: Interactive scientific charts
-        \item \textbf{ECharts}: Rich visualization library từ Apache
-    \end{itemize}
+    \item \textbf{Tight Integration with Data Stack}: Tích hợp trực tiếp với Pandas, NumPy, PyArrow và các thư viện học máy, phù hợp cho việc hiển thị dữ liệu Parquet và kết quả mô hình.
     
-    \item \textbf{State Management}:
-    \begin{itemize}
-        \item \textbf{Redux Toolkit}: Centralized state management
-        \item \textbf{React Query}: Server state management và caching
-        \item \textbf{Zustand}: Lightweight alternative cho simple cases
-    \end{itemize}
+    \item \textbf{Interactive Visualization}: Hỗ trợ tương tác người dùng theo thời gian thực (filter, slider, selection) cho các phân tích giao thông.
     
-    \item \textbf{Real-time Communication}:
-    \begin{itemize}
-        \item \textbf{Socket.IO}: Bidirectional event-based communication
-        \item \textbf{WebSocket API}: Native browser WebSocket support
-    \end{itemize}
-\end{enumerate}
+    \item \textbf{Lightweight Deployment}: Không yêu cầu quản lý state phức tạp hay frontend build system, phù hợp cho môi trường nghiên cứu và demo hệ thống.
+\end{itemize}
 
-\textbf{UI Component Libraries}:
+Trong hệ thống này, Streamlit được sử dụng để:
+\begin{itemize}
+    \item Trực quan hóa dữ liệu giao thông theo không gian và thời gian
+    \item Hiển thị kết quả dự đoán và phân tích của mô hình
+    \item Phục vụ mục đích demo, đánh giá và trình bày hệ thống
+\end{itemize}
 
-Material-UI, Ant Design, và Chakra UI cung cấp pre-built components tuân theo design systems, giúp đẩy nhanh development và đảm bảo consistency trong UI/UX.
+Cách tiếp cận kết hợp FastAPI và Streamlit giúp tách biệt rõ ràng giữa lớp xử lý nghiệp vụ và lớp trình diễn, đảm bảo tính đơn giản, dễ bảo trì và phù hợp với mục tiêu nghiên cứu của đề tài.
 
 \subsubsection{Containerization và Orchestration}
 
@@ -412,35 +291,38 @@ Kubernetes (K8s) là container orchestration platform mã nguồn mở, tự đ�
 
 Với hệ thống giao thông cần high availability và khả năng scale dynamic theo traffic load, Kubernetes cung cấp infrastructure layer mạnh mẽ để đảm bảo reliability và performance.
 
-\subsubsection{Monitoring và Observability}
+\subsection{Tóm tắt stack công nghệ}
 
-\subsubsubsection{Prometheus và Grafana}
+Bảng dưới đây tóm tắt các công nghệ chính được sử dụng trong đề tài:
 
-\textbf{Prometheus} là monitoring system và time-series database, thu thập metrics từ các services thông qua pull model. Prometheus lưu trữ metrics với timestamps và labels, hỗ trợ PromQL query language mạnh mẽ cho aggregations và alerting.
+\begin{table}[h]
+\centering
+\caption{Stack công nghệ hệ thống}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Layer} & \textbf{Technology} & \textbf{Purpose} \\ \hline
+Programming & Python 3.11+ & Main development language \\ \hline
+ML Framework & PyTorch 2.0+ & Deep learning models \\ \hline
+Graph Library & PyTorch Geometric & GNN implementation \\ \hline
+Message Queue & Apache Kafka & Event streaming backbone \\ \hline
+Stream Processing & Python + Kafka & Real-time data processing \\ \hline
+Storage & Apache Parquet & Long-term historical data \\ \hline
+% Cache & Redis & In-memory data store \\ \hline
+Model Serving & FastAPI + PyTorch & Inference API \\ \hline
+% Monitoring & Prometheus + Grafana & Metrics và visualization \\ \hline
+\end{tabular}
+\label{tab:tech_stack}
+\end{table}
 
-\textbf{Grafana} là visualization platform, kết nối với Prometheus và nhiều data sources khác để tạo dashboards tương tác. Grafana cung cấp real-time monitoring, alerting rules, và khả năng tạo custom visualizations.
-
-\textbf{Metrics quan trọng trong hệ thống giao thông:}
-
+Kiến trúc này được thiết kế để:
 \begin{itemize}
-    \item System metrics: CPU, memory, disk I/O, network
-    \item Application metrics: API latency, throughput, error rates
-    \item Business metrics: Prediction accuracy, correlation detection rate
-    \item Kafka metrics: Consumer lag, message rate, partition distribution
-    \item Flink metrics: Backpressure, checkpoint duration, task utilization
+    \item Xử lý dữ liệu streaming real-time hiệu quả
+    \item Scale horizontal khi traffic tăng
+    \item Maintain low latency cho inference
+    \item Support reprocessing và retraining
+    \item Provide observability và monitoring đầy đủ
 \end{itemize}
 
-\subsubsubsection{ELK Stack}
-
-ELK (Elasticsearch, Logstash, Kibana) stack cung cấp giải pháp log management và analysis:
-
-\begin{itemize}
-    \item \textbf{Elasticsearch}: Distributed search và analytics engine
-    \item \textbf{Logstash}: Data processing pipeline cho log ingestion
-    \item \textbf{Kibana}: Visualization platform cho logs và metrics
-\end{itemize}
-
-Log aggregation giúp troubleshoot issues, analyze user behavior, audit system activities, và detect anomalies trong hệ thống phân tán.
 
 \newpage
 \subsection{Kết chương}
@@ -466,7 +348,7 @@ Chương 2 đã trình bày một cách toàn diện nền tảng lý thuyết v
     
     \item \textbf{Kiến trúc Kappa \& Apache Kafka}: Đảm bảo khả năng xử lý dữ liệu streaming thời gian thực với độ trễ thấp và độ tin cậy cao, phù hợp với đặc thù dữ liệu liên tục từ các cảm biến giao thông.
     
-    \item \textbf{Cơ sở dữ liệu không gian - thời gian}: Sự kết hợp giữa PostgreSQL (PostGIS) và TimescaleDB giải quyết bài toán lưu trữ và truy vấn hiệu quả cho dữ liệu vừa có thuộc tính vị trí địa lý, vừa có tính chất chuỗi thời gian.
+    \item \textbf{Lưu trữ dữ liệu không gian -- thời gian}: Hệ thống sử dụng định dạng Apache Parquet để lưu trữ dữ liệu giao thông có đặc trưng vừa mang thông tin không gian (tọa độ, đoạn đường), vừa mang tính chuỗi thời gian. Cách tiếp cận này cho phép tổ chức dữ liệu theo các phân vùng thời gian và thuộc tính không gian, đồng thời tối ưu hiệu năng cho các tác vụ phân tích, thống kê và huấn luyện mô hình học máy.
     
     \item \textbf{Hạ tầng triển khai}: Việc sử dụng Docker và Kubernetes đảm bảo hệ thống có khả năng mở rộng (scalability), dễ dàng triển khai và vận hành ổn định trong môi trường thực tế.
 \end{itemize}

@@ -1,0 +1,60 @@
+\subsection{Khai thác tương quan giao thông và xác định tuyến mục tiêu}
+\label{subsec:correlation_target_selection}
+
+Sau khi xây dựng vùng giao thông chức năng như trình bày ở Mục~\ref{subsec:dynamic_zone_construction},
+bước tiếp theo nhằm làm rõ các mối quan hệ ảnh hưởng giữa các tuyến đường trong vùng và xác định
+tập các tuyến mục tiêu cần dự đoán. Trong bối cảnh giao thông đô thị, ùn tắc không lan truyền
+một cách ngẫu nhiên mà thường tuân theo các mối quan hệ có hướng và có độ trễ theo thời gian,
+phản ánh động lực di chuyển của phương tiện trong mạng lưới giao thông. Do đó, việc khai thác
+các mối tương quan giao thông có xét đến độ trễ đóng vai trò then chốt trong việc xác định
+các tuyến có ảnh hưởng quan trọng.
+
+\subsubsection{Tương quan chéo có độ trễ trong vùng giao thông}
+\label{subsubsec:zone_correlation}
+
+Đối với mỗi vùng giao thông chức năng, nhóm chỉ xét các tuyến đường thuộc vùng này khi
+tính toán tương quan, nhằm đảm bảo tính cục bộ và giảm độ phức tạp tính toán. Với mỗi cặp
+tuyến đường $(i,j)$ trong vùng, từ chuỗi thời gian vận tốc đã được chuẩn hóa $S_i(t)$ và
+$S_j(t)$, hàm tương quan chéo có độ trễ $X_{i,j}(\tau)$ được tính trên một cửa sổ thời gian
+lịch sử, với $\tau \in [-\tau_{\max}, \tau_{\max}]$.
+
+Từ hàm tương quan chéo này, nhóm xác định hai đại lượng đặc trưng cho mối quan hệ giữa
+hai tuyến đường: (i) trọng số liên kết dương $W^{\text{pos}}_{i,j}$, phản ánh mức độ nổi trội
+của đỉnh tương quan so với nền nhiễu, và (ii) độ trễ tương ứng $\tau^{\text{pos}}_{i,j}$,
+xác định hướng và thời điểm ảnh hưởng mạnh nhất. Các đại lượng này được tính theo khuôn khổ
+mạng tương quan giao thông được đề xuất bởi Guo et al.~\cite{guo2019identifying}.
+
+Việc sử dụng $W^{\text{pos}}_{i,j}$ thay vì giá trị tương quan cực đại thuần túy cho phép
+loại bỏ các mối tương quan yếu hoặc ngẫu nhiên, đồng thời làm nổi bật các liên kết có ý nghĩa
+thống kê trong động lực giao thông. Trong khi đó, $\tau^{\text{pos}}_{i,j}$ cung cấp thông
+tin về quan hệ lead--lag giữa các tuyến, phản ánh hướng lan truyền tiềm năng của ùn tắc.
+
+\subsubsection{Lọc liên kết tương quan theo tiêu chí thống kê và không gian}
+\label{subsubsec:link_filtering}
+
+Không phải mọi cặp tuyến có tương quan dương đều mang ý nghĩa chức năng trong bối cảnh lan
+truyền ùn tắc. Do đó, nhóm áp dụng một tập các tiêu chí lọc để chỉ giữ lại các liên kết
+tương quan mạnh và hợp lý về mặt không gian--thời gian. Cụ thể, một liên kết $(i,j)$ được giữ
+lại nếu thỏa mãn đồng thời các điều kiện sau:
+\begin{equation}
+W^{\text{pos}}_{i,j} \geq W_{\min}, \quad
+D_{\min} \leq D_{i,j} \leq D_{\max}, \quad
+|\tau^{\text{pos}}_{i,j}| \leq \tau_{\text{cut}},
+\end{equation}
+trong đó $D_{i,j}$ là khoảng cách Haversine giữa hai tuyến đường $i$ và $j$. Các ngưỡng
+$W_{\min}$, $D_{\min}$, $D_{\max}$ và $\tau_{\text{cut}}$ được lựa chọn nhằm cân bằng giữa
+việc giữ lại các liên kết có ý nghĩa và loại bỏ nhiễu.
+
+Bước lọc này đảm bảo rằng các liên kết tương quan được sử dụng trong mô hình không chỉ mạnh
+về mặt thống kê, mà còn phù hợp với ràng buộc vật lý và động học của giao thông đô thị. Các
+liên kết có khoảng cách quá xa hoặc độ trễ quá lớn thường khó phản ánh mối quan hệ ảnh hưởng
+trực tiếp và do đó bị loại bỏ.
+
+\subsubsection{Xác định tập tuyến mục tiêu}
+\label{subsubsec:target_mask}
+
+Từ tập các liên kết tương quan thỏa mãn các tiêu chí lọc, nhóm xác định \textit{tập các
+tuyến mục tiêu} trong mỗi vùng giao thông. Cụ thể, một tuyến đường $j$ được xem là tuyến
+mục tiêu nếu nó xuất hiện trong ít nhất một liên kết tương quan được giữ lại với bất kỳ tuyến
+nào khác trong vùng. Trong trường hợp số lượng tuyến mục tiêu quá lớn, nhóm chỉ giữ lại
+một tập con gồm các tuyến có trọng số liên kết $W^{\text{pos}}$ lớn nhất.

@@ -148,6 +148,202 @@ trong đó:
 \end{itemize}
 
 GCN cho phép khuếch tán thông tin giữa các nút theo cấu trúc không gian của mạng giao thông, đóng vai trò nền tảng cho việc mô hình hóa tương quan không gian.
+\subsubsubsection{Tính chất và ưu điểm của GCN}
+
+\begin{enumerate}
+    \item \textbf{Chia sẻ tham số (Parameter Sharing)}  
+    Bộ lọc đồ thị sử dụng chung cho tất cả các nút, giúp giảm số tham số và tăng khả năng khái quát.
+
+    \item \textbf{Localized Receptive Field}  
+    Mỗi lớp GCN chỉ tổng hợp thông tin từ láng giềng 1-hop, đảm bảo tính “địa phương” trong mô hình hoá luồng giao thông.
+
+    \item \textbf{Mở rộng vùng tiếp nhận thông tin (Expanded Receptive Field)}  
+    Khi xếp chồng nhiều lớp GCN, mô hình có thể thu thập thông tin từ các láng giềng 2-hop, 3-hop,… phù hợp với việc mô phỏng lan truyền tắc đường.
+\end{enumerate}
+
+\subsubsection{Graph Attention Networks (GAT)}
+
+GAT được đề xuất nhằm khắc phục hạn chế của GCN trong việc gán trọng số cố định cho các láng giềng. Theo đó, GAT học trọng số attention một cách động:
+
+\[
+\alpha_{ij} = 
+\frac{\exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}\mathbf{h}_i \| \mathbf{W}\mathbf{h}_j]\right)\right)}
+{\sum_{k \in \mathcal{N}_i} \exp\left(\text{LeakyReLU}\left(\mathbf{a}^T[\mathbf{W}\mathbf{h}_i \| \mathbf{W}\mathbf{h}_k]\right)\right)}.
+\]
+
+Đầu ra của một nút:
+
+\[
+\mathbf{h}'_i = \sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij} \mathbf{W}\mathbf{h}_j\right).
+\]
+
+Nhờ cơ chế attention, mô hình có thể nhận biết nút nào đóng vai trò quan trọng hơn trong quá trình dự báo.
+
+\subsubsubsection{Multi-head Attention}
+
+GAT sử dụng $K$ attention heads độc lập nhằm tăng tính ổn định và khả năng biểu diễn:
+
+\[
+\mathbf{h}'_i 
+= \bigg\|_{k=1}^K 
+\sigma\left(\sum_{j \in \mathcal{N}_i} \alpha_{ij}^k \mathbf{W}^k \mathbf{h}_j\right).
+\]
+
+Việc kết hợp nhiều head giúp mô hình học được nhiều dạng quan hệ không gian khác nhau trong mạng giao thông.
+
+\subsection{Mô hình học chuỗi thời gian}
+
+Việc dự báo giao thông là một trong những bài toán tiêu biểu của phân tích chuỗi thời gian, nơi dữ liệu có tính tuần hoàn, phụ thuộc dài hạn, và bị tác động bởi các yếu tố theo mùa (seasonality) như giờ cao điểm, ngày cuối tuần hay sự kiện đặc biệt. Để mô hình hóa các quan hệ theo thời gian, các kiến trúc mạng hồi quy sâu (Recurrent Neural Networks – RNN) đóng vai trò nền tảng, trước khi phát triển thành các biến thể mạnh mẽ hơn như LSTM và GRU.
+
+\subsubsection{Recurrent Neural Networks (RNN)}
+
+\subsubsubsection{Kiến trúc RNN cơ bản}
+
+RNN được thiết kế để xử lý dữ liệu có tính chuỗi bằng cách duy trì một \textit{trạng thái ẩn} (hidden state) đóng vai trò như bộ nhớ tạm của mô hình. Tại mỗi thời điểm $t$, mô hình tiếp nhận đầu vào $\mathbf{x}_t$, cập nhật trạng thái ẩn dựa trên trạng thái trước đó và đưa ra đầu ra tương ứng.
+
+\[
+\mathbf{h}_t = \sigma(\mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{W}_{xh}\mathbf{x}_t + \mathbf{b}_h),
+\]
+\[
+\mathbf{y}_t = \mathbf{W}_{hy}\mathbf{h}_t + \mathbf{b}_y.
+\]
+
+Trong đó:
+\begin{itemize}
+    \item $\mathbf{h}_{t}$ lưu trữ thông tin tích lũy đến thời điểm $t$,
+    \item $\mathbf{W}_{hh}$ mô hình hóa mức độ ảnh hưởng của trạng thái trước đó lên trạng thái hiện tại,
+    \item $\mathbf{W}_{xh}$ biểu diễn ánh xạ từ đầu vào hiện tại lên trạng thái ẩn,
+    \item $\sigma$ là hàm kích hoạt phi tuyến như $\tanh$ hoặc ReLU.
+\end{itemize}
+
+Với đặc trưng chia sẻ trọng số theo thời gian, RNN rất phù hợp để mô hình hoá các mẫu chu kỳ trong giao thông như:
+\begin{itemize}
+    \item tốc độ giảm mạnh vào giờ cao điểm,
+    \item sự lặp lại theo ngày hoặc theo tuần,
+    \item ảnh hưởng lan truyền theo thời gian từ các điểm ùn tắc.
+\end{itemize}
+
+\subsubsubsection{Vấn đề Vanishing/Exploding Gradients}
+
+Khi thực hiện lan truyền ngược theo thời gian (Backpropagation Through Time – BPTT), gradient của hàm mất mát đối với trọng số có dạng:
+
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{W}}
+= \sum_{t=1}^T 
+\frac{\partial \mathcal{L}_t}{\partial \mathbf{W}}
+\propto
+\prod_{i=1}^t \frac{\partial \mathbf{h}_i}{\partial \mathbf{h}_{i-1}}.
+\]
+
+Do $\frac{\partial \mathbf{h}_i}{\partial \mathbf{h}_{i-1}}$ thường chứa đạo hàm của hàm $\tanh$ hay sigmoid (giá trị trong khoảng $(0, 1)$), tích số trên dễ dàng:
+\begin{itemize}
+    \item \textbf{tiệm cận 0} khi $t$ lớn → \textbf{vanishing gradient}: mô hình “quên” thông tin xa,
+    \item \textbf{tăng nhanh đến $\infty$} → \textbf{exploding gradient}: mô hình học không ổn định, dễ gây sai lệch.
+\end{itemize}
+
+Trong bối cảnh giao thông, điều này khiến RNN truyền thống khó nắm bắt được các mối quan hệ dài hạn như:
+\begin{itemize}
+    \item ảnh hưởng của ùn tắc từ 30–60 phút trước,
+    \item các xu hướng thay đổi theo ngày hoặc theo tuần.
+\end{itemize}
+
+Vì vậy, các kiến trúc cải tiến LSTM và GRU ra đời nhằm giải quyết hạn chế cốt lõi này.
+
+\subsubsection{Long Short-Term Memory (LSTM)}
+
+\subsubsubsection{Kiến trúc LSTM}
+
+LSTM sử dụng một cơ chế gating để kiểm soát luồng thông tin ra vào. Điều này cho phép mô hình giữ lại thông tin quan trọng trong thời gian dài và loại bỏ các thông tin nhiễu.
+
+LSTM giới thiệu hai trạng thái:
+\begin{itemize}
+    \item \textbf{Cell state} $\mathbf{C}_t$ đóng vai trò như “bộ nhớ dài hạn”,
+    \item \textbf{Hidden state} $\mathbf{h}_t$ là đại diện ngắn hạn được dùng để dự báo.
+\end{itemize}
+
+Các cổng điều khiển:
+
+\[
+\mathbf{f}_t = \sigma(\mathbf{W}_f[\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_f) \quad \text{(forget gate)}
+\]
+
+\[
+\mathbf{i}_t = \sigma(\mathbf{W}_i[\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_i) \quad \text{(input gate)}
+\]
+
+\[
+\tilde{\mathbf{C}}_t = \tanh(\mathbf{W}_C[\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_C) \quad \text{(candidate memory)}
+\]
+
+\[
+\mathbf{C}_t = \mathbf{f}_t \odot \mathbf{C}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{C}}_t \quad \text{(updated memory)}
+\]
+
+\[
+\mathbf{o}_t = \sigma(\mathbf{W}_o[\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_o) \quad \text{(output gate)}
+\]
+
+\[
+\mathbf{h}_t = \mathbf{o}_t \odot \tanh(\mathbf{C}_t)
+\]
+
+Cơ chế này cho phép LSTM thể hiện vượt trội trong các bài toán có sự phụ thuộc dài hạn — điều đặc biệt quan trọng đối với dữ liệu giao thông vốn có tính chu kỳ dài và thường xuyên chịu ảnh hưởng bởi nhiều yếu tố trước đó.
+
+\subsubsection{Gated Recurrent Unit (GRU)}
+
+\subsubsubsection{Kiến trúc GRU}
+
+GRU là biến thể tinh gọn hơn của LSTM, kết hợp cell state và hidden state thành một đại lượng duy nhất. Mặc dù đơn giản hơn, GRU vẫn giữ khả năng học phụ thuộc dài hạn nhưng sử dụng ít tham số hơn.
+
+\[
+\mathbf{r}_t = \sigma(\mathbf{W}_r[\mathbf{h}_{t-1}, \mathbf{x}_t]) \quad \text{(reset gate)}
+\]
+
+\[
+\mathbf{u}_t = \sigma(\mathbf{W}_u[\mathbf{h}_{t-1}, \mathbf{x}_t]) \quad \text{(update gate)}
+\]
+
+\[
+\tilde{\mathbf{h}}_t = \tanh(\mathbf{W}[\mathbf{r}_t \odot \mathbf{h}_{t-1}, \mathbf{x}_t]) \quad \text{(candidate activation)}
+\]
+
+\[
+\mathbf{h}_t = \mathbf{u}_t \odot \mathbf{h}_{t-1} + (1 - \mathbf{u}_t) \odot \tilde{\mathbf{h}}_t
+\]
+
+Reset gate giúp xác định bao nhiêu thông tin quá khứ cần loại bỏ, trong khi update gate kiểm soát mức độ giữ lại thông tin cũ so với thông tin mới.
+
+\subsubsection{So sánh LSTM và GRU}
+
+\begin{table}[h]
+\centering
+\caption{So sánh LSTM và GRU}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Đặc điểm} & \textbf{LSTM} & \textbf{GRU} \\ \hline
+Số cổng & 3 (forget, input, output) & 2 (update, reset) \\ \hline
+Số tham số & Nhiều hơn & Ít hơn \\ \hline
+Thời gian huấn luyện & Chậm hơn & Nhanh hơn \\ \hline
+Khả năng lưu trữ dài hạn & Rất tốt & Tốt \\ \hline
+Dữ liệu nhỏ / hạn chế & Kém phù hợp & Hiệu quả hơn \\ \hline
+Khả năng khái quát hóa & Cao & Tùy bài toán \\ \hline
+\end{tabular}
+\label{tab:lstm_vs_gru}
+\end{table}
+
+Nhìn chung:
+\begin{itemize}
+    \item LSTM phù hợp với bài toán có cấu trúc phức tạp và chuỗi dài,
+    \item GRU là lựa chọn nhẹ hơn, thời gian huấn luyện nhanh hơn, phù hợp trong môi trường sản xuất (production) hoặc dữ liệu hạn chế.
+\end{itemize}
+
+Trong dự báo giao thông, lựa chọn giữa LSTM và GRU phụ thuộc vào:
+\begin{itemize}
+    \item mức độ nhiễu của dữ liệu cảm biến,
+    \item chiều dài chuỗi đầu vào,
+    \item tài nguyên tính toán,
+    \item yêu cầu latency của ứng dụng thời gian thực.
+\end{itemize}
 
 \newpage
 
@@ -340,13 +536,3 @@ Khả năng diễn giải & Tương đối tốt & Khó hơn \\ \hline
 \end{tabular}
 \label{tab:bert_vs_rnn}
 \end{table}
-
-\subsection{Mô hình đề xuất: Traffic-BERT}
-
-\subsubsection{Kiến trúc tổng thể}
-
-Dựa trên nền tảng BERT và các đặc điểm của dữ liệu giao thông, nghiên cứu này đề xuất mô hình \textbf{Traffic-BERT} gồm các thành phần chính:
-
-\begin{enumerate}
-    \item \textbf{Spatial Encoder (GCN):} Trích xuất đặc trưng không gian từ cấu trúc mạng lưới
-    \item \textbf{Temporal Encoder (BERT):} Học mối quan hệ thời gian hai chi

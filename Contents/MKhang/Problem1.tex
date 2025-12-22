@@ -1,0 +1,43 @@
+\section{Phương pháp đề xuất}
+\label{sec:method}
+
+\subsection{Tổng quan phương pháp và động cơ lựa chọn mô hình}
+\label{subsec:problem_overview}
+
+\subsubsection{Định hướng giải pháp}
+Trong nghiên cứu này, nhóm đề xuất một phương pháp dự báo ùn tắc giao thông dựa trên
+\textbf{mô hình Transformer encoder-only theo phong cách BERT + Spatial Encoding(Laplacian) + Temporal Encoding}, được thiết kế để học biểu diễn
+không gian--thời gian trên các \textit{vùng giao thông động} (dynamic traffic zones). Mỗi vùng giao thông được biểu diễn như một đồ thị con (subgraph) bao gồm các tuyến đường có mối liên hệ về không
+gian, cấu trúc mạng lưới và hành vi giao thông, được khởi tạo từ một sự kiện ùn tắc tại thời điểm
+nhất định.
+
+Việc lựa chọn kiến trúc Transformer encoder-only + Spatial Encoding(Laplacian) + Temporal Encoding được thúc đẩy bởi những hạn chế cố hữu của các
+phương pháp học biểu diễn đồ thị dựa trên cơ chế truyền thông tin cục bộ (message passing), chẳng
+hạn như Graph Convolutional Networks (GCN) hay các biến thể GNN phổ biến khác. Các mô hình này
+cập nhật biểu diễn nút thông qua việc tổng hợp thông tin từ lân cận k-hop, do đó gặp khó khăn trong
+việc nắm bắt cấu trúc toàn cục của đồ thị và phân biệt các nút có vai trò cấu trúc khác nhau nhưng
+có lân cận cục bộ tương tự. Hơn nữa, khi tăng số lớp, các mô hình GNN thường gặp hiện tượng
+\textit{over-smoothing}, khiến biểu diễn của các nút trở nên khó phân biệt. Ngoài ra, trong bối cảnh dữ liệu chuỗi thời gian dài hạn (long-term temporal dependency) như bài toán giao thông đô thị, các mô hình học tuần tự truyền thống dựa trên Recurrent Neural Networks (RNN) hoặc các biến thể như LSTM/GRU cũng bộc lộ những hạn chế đáng kể. Mặc dù được thiết kế nhằm giảm thiểu hiện tượng suy biến gradient, các mô hình này vẫn gặp khó khăn trong việc học các phụ thuộc thời gian dài khi độ sâu theo thời gian tăng lên, dẫn đến hiện tượng vanishing gradient, làm suy giảm khả năng lan truyền thông tin từ các thời điểm xa trong quá khứ đến đầu ra dự đoán. Tương tự, các phương pháp dựa trên Temporal Convolution với receptive field hữu hạn thường chỉ nắm bắt được các mẫu cục bộ theo trục thời gian, và việc mở rộng phạm vi phụ thuộc đòi hỏi phải tăng độ sâu mạng, từ đó làm gia tăng độ phức tạp và nguy cơ mất ổn định trong huấn luyện.
+
+Những hạn chế trên đã được phân tích và làm rõ trong công trình của Ying et al.~\cite{ying2021graphormer},
+trong đó tác giả chỉ ra rằng Transformer có thể đạt hiệu quả cao trong học biểu diễn đồ thị nếu được bổ sung các cơ chế mã hóa cấu trúc phù hợp. Cụ thể, Graphormer cho thấy rằng việc đưa thông tin
+cấu trúc của đồ thị trực tiếp vào cơ chế self-attention cho phép mô hình vượt qua giới hạn biểu diễn
+của các kiến trúc GNN truyền thống, đồng thời cung cấp trường nhìn toàn cục (global receptive field)
+cho mỗi nút trong đồ thị.
+
+\subsubsection{Quy trình xử lý chính}
+
+Pipeline xử lý dữ liệu và phân tích được thực hiện theo trình tự sau:
+
+\begin{enumerate}
+    \item \textbf{Thu thập dữ liệu}: Lấy dữ liệu lịch sử từ TomTom API cho các nút giao thông được chọn
+    \item \textbf{Tiền xử lý}: Làm sạch, chuẩn hóa, và xử lý missing values
+    \item \textbf{Trích xuất đặc trưng}: Tính toán các đặc trưng giao thông và thời gian
+    \item \textbf{Phân tích tương quan}: Xác định mối tương quan không gian-thời gian
+    \item \textbf{Kiểm định nhân quả}: Áp dụng Granger Causality Test
+    \item \textbf{Xây dựng đồ thị động}: Tạo ma trận kề thay đổi theo thời gian
+    \item \textbf{Huấn luyện mô hình}: Phát triển mô hình dự báo dựa trên GNN
+    \item \textbf{Đánh giá và triển khai}: Kiểm thử và tích hợp vào hệ thống
+\end{enumerate}
+
+\newpage

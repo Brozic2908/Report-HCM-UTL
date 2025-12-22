@@ -1,0 +1,77 @@
+\subsection{Xây dựng vùng giao thông động}
+\label{subsec:dynamic_zone_construction}
+
+Như đã trình bày ở Mục~\ref{subsec:problem_overview}, vùng giao thông trong nghiên cứu này
+không được xem là một khu vực không gian cố định, mà là một \textit{vùng chức năng động}
+(functional dynamic zone) được khởi tạo từ các sự kiện ùn tắc và mở rộng dựa trên mối liên hệ
+không gian--thời gian giữa các tuyến đường. Quá trình xây dựng vùng giao thông động bao gồm
+hai giai đoạn chính: (i) phát hiện cụm ùn tắc ban đầu tại từng thời điểm, và (ii) mở rộng vùng
+dựa trên cấu trúc mạng lưới và các tiêu chí không gian.
+
+\subsubsection{Phát hiện cụm ùn tắc theo snapshot}
+\label{subsubsec:dbscan_snapshot}
+
+Tại mỗi thời điểm $t$, nhóm xác định tập các tuyến đường đang ở trạng thái ùn tắc dựa trên
+nhãn nhị phân $y_i(t) \in \{0,1\}$. Đối với mỗi tuyến đường, tọa độ không gian được biểu diễn
+bằng điểm trung tâm của tuyến, được tính từ trung điểm giữa hai nút đầu và cuối của tuyến
+trong đồ thị giao thông.
+
+Trên tập các tuyến đang ùn tắc tại thời điểm $t$, nhóm áp dụng thuật toán phân cụm
+DBSCAN để phát hiện các \textit{cụm ùn tắc theo snapshot}. DBSCAN được lựa chọn do không
+yêu cầu số cụm cố định trước và có khả năng phát hiện các cụm với hình dạng bất kỳ, phù hợp
+với đặc điểm phân bố không gian của ùn tắc giao thông.
+Mỗi cụm thu được từ DBSCAN tại thời điểm $t$ được xem như một \textit{seed congestion cluster},
+đóng vai trò khởi tạo cho quá trình xây dựng vùng giao thông động.\
+\subsubsection{Chiến lược chọn seed vùng}
+\label{subsubsec:seed_sampling}
+
+Để đảm bảo tính cân bằng giữa các trạng thái giao thông khác nhau trong quá trình huấn luyện,
+nhóm áp dụng chiến lược chọn seed vùng kết hợp giữa các cụm ùn tắc và các vùng không
+ùn tắc. Cụ thể, trong quá trình sinh mẫu huấn luyện, $60\%$ seed được lấy từ các cụm ùn tắc
+được phát hiện bởi DBSCAN tại thời điểm $t$, trong khi $40\%$ seed còn lại được chọn từ các
+vùng không ùn tắc.
+
+Các seed không ùn tắc có thể được tạo bằng cách áp dụng DBSCAN trên tập các tuyến không
+ùn tắc. Sau khi đã chọn ra các cụm kẹt hoặc không kẹt từ DBSCAN, mô hình sẽ lựa chọn ngẫu nhiên một vùng cụ thể với điều kiện
+tương ứng tại thời điểm t. Chiến lược này giúp mô hình học được cả các
+mẫu lan truyền ùn tắc lẫn các trạng thái giao thông ổn định, đồng thời giảm thiểu hiện tượng
+lệch lớp trong dữ liệu.
+
+\subsubsection{Mở rộng vùng theo cấu trúc mạng lưới}
+\label{subsubsec:graph_expansion}
+
+Từ mỗi seed congestion cluster, nhóm tiến hành mở rộng vùng giao thông để thu thập
+tập các tuyến ứng viên có khả năng liên quan đến động lực giao thông của vùng. Trước hết,
+tất cả các tuyến thuộc seed cluster được đưa vào tập vùng ban đầu. Sau đó, dựa trên cấu trúc
+đồ thị giao thông toàn cục, vùng được mở rộng bằng cách bổ sung các tuyến lân cận theo quan
+hệ topology, với số bước mở rộng (hop) được được nhóm chọn là 1.
+
+Quá trình mở rộng này nhằm đảm bảo rằng vùng giao thông không chỉ bao gồm các tuyến đang
+ùn tắc tại thời điểm hiện tại, mà còn bao phủ các tuyến có khả năng đóng vai trò trung gian
+hoặc chịu ảnh hưởng từ quá trình lan truyền ùn tắc trong tương lai.
+
+\subsubsection{Lọc vùng theo bán kính không gian}
+\label{subsubsec:radius_filter}
+
+Để giới hạn phạm vi không gian của vùng giao thông và đảm bảo tính hợp lý về mặt vật lý,
+nhóm áp dụng một bước lọc cứng dựa trên bán kính không gian. Cụ thể, đối với mỗi seed
+cluster, một điểm trung tâm của vùng được xác định từ trung tâm hình học của các tuyến
+trong seed.
+
+Với mỗi tuyến ứng viên thu được từ bước mở rộng theo topology, khoảng cách Haversine từ
+tuyến đó đến tâm seed được tính toán. Chỉ những tuyến có khoảng cách nhỏ hơn hoặc bằng
+ngưỡng $R_{\max}$ mới được giữ lại trong vùng giao thông cuối cùng. Ở mô hình này nhóm chọn bán kính là 1500m cho mỗi vùng. Bước lọc này giúp loại
+bỏ các tuyến ở quá xa seed cluster, vốn khó có mối liên hệ trực tiếp với sự kiện ùn tắc ban đầu.
+
+\subsubsection{Vùng giao thông chức năng}
+\label{subsubsec:functional_zone}
+
+Sau các bước trên, vùng giao thông thu được không còn là một cụm không gian thuần túy,
+mà là một \textit{vùng giao thông chức năng}, bao gồm các tuyến đường có mối liên hệ về
+không gian, cấu trúc mạng lưới và tiềm năng ảnh hưởng giao thông. Đáng chú ý, các tuyến
+nằm trong vùng giao thông này không nhất thiết phải thuộc seed congestion cluster ban đầu,
+mà có thể nằm ngoài cụm nhưng vẫn có vai trò quan trọng trong động lực lan truyền ùn tắc.
+
+Vùng giao thông chức năng này đóng vai trò là đơn vị đầu vào cho các bước tiếp theo, trong
+đó các mối tương quan giao thông có độ trễ sẽ được khai thác để xác định các liên kết chức
+năng và tập các tuyến mục tiêu cần dự đoán.

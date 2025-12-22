@@ -1,0 +1,58 @@
+\subsection{Biểu diễn thời gian bằng Temporal Encoding}
+\label{subsec:temporal_encoding}
+
+Bên cạnh cấu trúc không gian của mạng lưới giao thông, tín hiệu giao thông còn thể hiện tính
+chu kỳ mạnh theo thời gian, đặc biệt là theo \textit{thời điểm trong ngày} (giờ cao điểm sáng/chiều)
+và \textit{ngày trong tuần}. Do đó, để mô hình Transformer có thể phân biệt được các mẫu hình
+giao thông theo ngữ cảnh thời gian và khai thác được tính tuần hoàn, nhóm thiết kế một cơ chế
+\textit{Temporal Encoding} để mã hóa thông tin thời gian và bổ sung vào embedding đầu vào.
+
+\subsubsection{Mã hóa vị trí tương đối theo bước thời gian}
+\label{subsubsec:relative_pos}
+
+Đối với mỗi mẫu huấn luyện, dữ liệu đầu vào được cắt theo một cửa sổ thời gian dài $L$ bước:
+$\{t-L+1,\dots,t\}$. Vì Transformer không có khái niệm thứ tự nội tại giữa các token, nhóm sử dụng
+\textit{relative position embedding} để mã hóa vị trí của mỗi bước thời gian trong cửa sổ này.
+Cụ thể, với chỉ số vị trí tương đối $p \in \{0,1,\dots,L-1\}$, mỗi vị trí được gán một vector embedding
+học được:
+\begin{equation}
+\mathbf{e}_p \in \mathbb{R}^{d_{\text{model}}}.
+\end{equation}
+Cơ chế này giúp mô hình phân biệt rõ các quan sát gần hiện tại và các quan sát xa hơn trong quá khứ,
+từ đó học được động lực thay đổi của giao thông theo thời gian.
+
+\subsubsection{Mã hóa chu kỳ theo thời điểm trong ngày và ngày trong tuần}
+\label{subsubsec:cyclic_time_features}
+
+Để khai thác tính chu kỳ của giao thông, nhóm sử dụng các đặc trưng thời gian gồm:
+(i) thời điểm trong ngày đã chuẩn hóa $\text{tod}(t) \in [0,1]$, và
+(ii) ngày trong tuần $\text{dow}(t) \in \{0,\dots,6\}$.
+Các đặc trưng này được đưa về dạng biểu diễn lượng giác nhằm phản ánh tính tuần hoàn:
+\begin{align}
+\mathbf{c}_{\text{tod}}(t) &= \big[\sin(2\pi\,\text{tod}(t)),\ \cos(2\pi\,\text{tod}(t))\big],\\
+\mathbf{c}_{\text{dow}}(t) &= \big[\sin(2\pi\,\text{dow}(t)/7),\ \cos(2\pi\,\text{dow}(t)/7)\big].
+\end{align}
+Sau đó, nhóm ghép các thành phần trên thành một vector 4 chiều và chiếu tuyến tính sang không gian
+$d_{\text{model}}$:
+\begin{equation}
+\mathbf{g}(t) = \mathbf{W}_t \big[\mathbf{c}_{\text{tod}}(t)\ \Vert\ \mathbf{c}_{\text{dow}}(t)\big] + \mathbf{b}_t,
+\quad \mathbf{W}_t \in \mathbb{R}^{d_{\text{model}} \times 4}.
+\end{equation}
+
+\subsubsection{Kết hợp Temporal Encoding vào embedding đầu vào}
+\label{subsubsec:temporal_integration}
+
+Đối với mỗi bước thời gian trong cửa sổ đầu vào, Temporal Encoding được tạo bằng cách cộng hai thành phần:
+(1) embedding vị trí tương đối theo chỉ số $p$ và (2) embedding chu kỳ theo ngữ cảnh thời gian thực:
+\begin{equation}
+\mathbf{t}(p) = \mathbf{e}_p + \mathbf{g}(t-L+1+p),
+\quad p = 0,\dots,L-1.
+\end{equation}
+Vector $\mathbf{t}(p)$ sau đó được cộng vào embedding của tất cả các tuyến đường tại bước thời gian $p$.
+Nhờ đó, cơ chế self-attention có thể điều kiện hóa trên ngữ cảnh thời gian, giúp mô hình học được các mẫu
+hình giao thông mang tính lặp lại (ví dụ cao điểm sáng/chiều) và phân biệt các trạng thái giao thông giữa
+các ngày trong tuần.
+
+Tóm lại, Temporal Encoding cung cấp cho mô hình Transformer một tín hiệu thời gian giàu ngữ cảnh,
+bổ sung cho Spatial Encoding dựa trên Laplacian, tạo nền tảng cho việc học biểu diễn không gian--thời gian
+trong phần kiến trúc mô hình trình bày ở mục tiếp theo.

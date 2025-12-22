@@ -1,15 +1,82 @@
-\appendix
-\section*{PHỤ LỤC}
-\addcontentsline{toc}{section}{PHỤ LỤC}
+\section{Phụ lục}
 
-\section{Mô tả chi tiết dữ liệu TomTom}
-Phụ lục này trình bày cấu trúc dữ liệu lịch sử thu thập từ TomTom Statistics API,
-bao gồm vận tốc trung bình, mức độ tắc nghẽn và chỉ số độ tin cậy theo từng đoạn đường.
+\subsection*{PHỤ LỤC A. DANH MỤC THUẬT NGỮ VÀ KÝ HIỆU}
+\addcontentsline{toc}{section}{PHỤ LỤC A. DANH MỤC THUẬT NGỮ VÀ KÝ HIỆU}
 
-\section{Chi tiết thuật toán mô phỏng lan truyền tắc nghẽn}
-Thuật toán~\ref{alg:congestion_propagation} mô phỏng quá trình lan truyền tắc nghẽn
-trên đồ thị nhân quả, dựa trên độ trễ lan truyền và xác suất ảnh hưởng giữa các nút.
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Thuật ngữ / Ký hiệu} & \textbf{Giải thích} \\ \hline
+TTGT & Tình trạng giao thông \\ \hline
+Segment & Đoạn đường trong mạng lưới giao thông \\ \hline
+Probe data & Dữ liệu GPS/định vị từ các phương tiện di chuyển \\ \hline
+DateRange & Khoảng ngày thu thập dữ liệu giao thông \\ \hline
+TimeSet & Tập thời gian trong ngày (giờ cao điểm, thấp điểm) \\ \hline
+ERD & Entity Relationship Diagram \\ \hline
+Chen notation & Ký pháp ERD dùng entity–relationship–attribute \\ \hline
+DTW & Dynamic Time Warping \\ \hline
+GCN & Graph Convolutional Network \\ \hline
+LSTM & Long Short-Term Memory \\ \hline
+\end{tabular}
 
-\section{Kiến trúc hệ thống triển khai}
-Hình~\ref{fig:system_deployment} mô tả kiến trúc tổng thể của hệ thống,
-bao gồm tầng thu thập dữ liệu, xử lý luồng, mô hình học máy và giao diện người dùng.
+\subsection*{PHỤ LỤC B. MÔ TẢ CẤU TRÚC DỮ LIỆU TOMTOM}
+\addcontentsline{toc}{section}{PHỤ LỤC B. MÔ TẢ CẤU TRÚC DỮ LIỆU TOMTOM}
+
+Dữ liệu giao thông được sử dụng trong dự án được lấy từ nền tảng TomTom dưới dạng JSON.
+Mỗi bộ dữ liệu (job) mô tả tình trạng giao thông của một khu vực trong một khoảng thời gian xác định.
+
+\subsubsection*{1. Thông tin Job}
+\begin{itemize}
+    \item job\_id: Mã định danh của lần truy xuất dữ liệu.
+    \item creation\_time: Thời điểm tạo bộ dữ liệu.
+    \item probeSource: Nguồn dữ liệu probe dùng để suy diễn thông tin giao thông.
+    \item map\_version: Phiên bản bản đồ được sử dụng.
+\end{itemize}
+
+\subsubsection*{2. Mạng lưới giao thông (Network)}
+\begin{itemize}
+    \item network\_id: Mã định danh mạng lưới.
+    \item Các đoạn đường (segment) thuộc mạng lưới.
+\end{itemize}
+
+\subsubsection*{3. Dữ liệu theo thời gian}
+\begin{itemize}
+    \item DateRange: Khoảng ngày quan sát.
+    \item TimeSet: Khoảng thời gian trong ngày.
+    \item SegmentTimeResult: Thông tin tốc độ, thời gian di chuyển, mức độ ùn tắc.
+\end{itemize}
+
+\subsection*{PHỤ LỤC C. SƠ ĐỒ ERD (CHEN NOTATION)}
+\addcontentsline{toc}{section}{PHỤ LỤC C. SƠ ĐỒ ERD (CHEN NOTATION)}
+
+Hình dưới đây mô tả sơ đồ ERD của dữ liệu giao thông đầu vào theo ký pháp Chen.
+Trong đó, \textit{SEGMENT\_SHAPE} được mô hình hóa như một thực thể yếu, phụ thuộc vào thực thể SEGMENT.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{Images/ERD.png}
+    \caption{Sơ đồ ERD dữ liệu giao thông theo Chen notation}
+\end{figure}
+\subsection*{PHỤ LỤC D. DANH SÁCH USE CASE \& ÁNH XẠ YÊU CẦU}
+\addcontentsline{toc}{section}{PHỤ LỤC D. DANH SÁCH USE CASE & ÁNH XẠ YÊU CẦU}
+
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Use Case} & \textbf{Mô tả} & \textbf{Yêu cầu liên quan} \\ \hline
+UC1 & Đăng nhập hệ thống & FR1 \\ \hline
+UC2 & Trực quan hóa dữ liệu & FR6 \\ \hline
+UC3 & Xem kết quả phân tích & FR3, FR4 \\ \hline
+UC4 & Dự báo lan truyền ùn tắc & FR5 \\ \hline
+UC5 & Xuất báo cáo & FR7 \\ \hline
+\end{tabular}
+\subsection*{PHỤ LỤC E. CÔNG CỤ, THƯ VIỆN VÀ CẤU HÌNH SỬ DỤNG}
+\addcontentsline{toc}{section}{PHỤ LỤC E. CÔNG CỤ, THƯ VIỆN VÀ CẤU HÌNH SỬ DỤNG}
+
+\begin{itemize}
+    \item Ngôn ngữ: Python 3.10+
+    \item Phân tích dữ liệu: Pandas, NumPy
+    \item Phân tích không gian: GeoPandas, Shapely
+    \item Mạng lưới giao thông: NetworkX
+    \item Học máy: PyTorch, TensorFlow
+    \item Trực quan hóa: Matplotlib, Plotly, Streamlit
+    \item Nguồn dữ liệu: TomTom Traffic API
+\end{itemize}

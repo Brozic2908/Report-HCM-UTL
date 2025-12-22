@@ -1,0 +1,56 @@
+\subsection{Mối tương quan giữa các tuyến trong giao thông đồ thị}
+Dựa trên những phân tích này, nhóm xây dựng mô hình Transformer encoder-only để học biểu
+diễn không gian--thời gian cho từng vùng giao thông. Tuy nhiên, khác với các bài toán đồ thị tĩnh,
+bài toán giao thông đô thị đòi hỏi mô hình phải nắm bắt được \textbf{tương tác động và có độ trễ theo
+thời gian giữa các tuyến đường}, phản ánh cơ chế lan truyền của ùn tắc trong mạng lưới giao thông.
+
+Để giải quyết yêu cầu này, nhóm sẽ khai thác các mối tương quan chéo có xét đến độ trễ thời gian
+giữa các tuyến đường, dựa trên khuôn khổ mạng tương quan giao thông được đề xuất bởi Guo
+et al.~\cite{guo2019identifying}. Cách tiếp cận này cho phép định lượng mức độ ảnh hưởng giữa
+các tuyến đường và xác định các tuyến có vai trò quan trọng trong quá trình lan truyền ùn tắc.
+
+Cụ thể, với mỗi cặp tuyến đường $i$ và $j$, từ chuỗi thời gian vận tốc đã được chuẩn hóa
+$S_i(t)$ và $S_j(t)$, hàm tương quan chéo có độ trễ được định nghĩa như sau:
+\begin{equation}
+X_{i,j}(\tau) =
+\frac{
+\sum_{t=1}^{L-\tau} (S_i(t) - \bar{S}_i)\,(S_j(t+\tau) - \bar{S}_j)
+}{
+\sqrt{
+\sum_{t=1}^{L-\tau} (S_i(t) - \bar{S}_i)^2
+\sum_{t=1}^{L-\tau} (S_j(t+\tau) - \bar{S}_j)^2
+}
+},
+\end{equation}
+trong đó $\tau \in [-\tau_{\max}, \tau_{\max}]$ là độ trễ thời gian, $L$ là độ dài chuỗi thời gian,
+và $\bar{S}_i$, $\bar{S}_j$ lần lượt là giá trị trung bình của các chuỗi tương ứng. Với $\tau < 0$,
+ta có $X_{i,j}(\tau) = X_{j,i}(-\tau)$.
+
+Từ hàm tương quan chéo này, Guo et al.~\cite{guo2019identifying} đề xuất trọng số liên kết dương
+(positive link weight) giữa hai tuyến đường $i$ và $j$ được xác định bởi:
+\begin{equation}
+W^{\text{pos}}_{i,j} =
+\frac{
+\max_{\tau} X_{i,j}(\tau) - \text{mean}_{\tau} \left( X_{i,j}(\tau) \right)
+}{
+\text{std}_{\tau} \left( X_{i,j}(\tau) \right)
+},
+\end{equation}
+trong đó $\max_{\tau}$, $\text{mean}_{\tau}$ và $\text{std}_{\tau}$ lần lượt là giá trị lớn nhất,
+trung bình và độ lệch chuẩn của hàm tương quan chéo trên miền $\tau$. Đồng thời, độ trễ tương ứng
+với ảnh hưởng mạnh nhất được xác định là:
+\begin{equation}
+\tau^{\text{pos}}_{i,j} = \arg\max_{\tau} X_{i,j}(\tau).
+\end{equation}
+
+Trọng số $W^{\text{pos}}_{i,j}$ phản ánh mức độ nổi trội của đỉnh tương quan so với nền nhiễu,
+giúp lọc bỏ các tương quan yếu hoặc ngẫu nhiên, trong khi $\tau^{\text{pos}}_{i,j}$ cung cấp thông
+tin về hướng và độ trễ của ảnh hưởng giữa các tuyến đường. Việc sử dụng các đại lượng này cho
+phép nhóm xác định các liên kết giao thông mang ý nghĩa chức năng, phù hợp để mô hình hóa
+quá trình lan truyền ùn tắc trong không gian và thời gian.
+
+Trên cơ sở các liên kết tương quan có ý nghĩa thống kê và ràng buộc không gian, nhóm xây
+dựng các vùng giao thông chức năng và xác định tập các tuyến mục tiêu cần dự đoán. Các vùng
+này sau đó được đưa vào mô hình Transformer encoder-only với các cơ chế mã hóa không gian--
+thời gian, cho phép học biểu diễn giàu ngữ cảnh và nâng cao khả năng dự báo ùn tắc giao thông
+trong môi trường đô thị phức tạp.

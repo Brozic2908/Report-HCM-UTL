@@ -5,7 +5,7 @@
 \subsubsubsection{Tổng quan}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{Images/Usecase tổng quan.drawio.png}
+    \includegraphics[width=0.9\linewidth]{Images/Usecase tổng quan.png}
     \caption{Sơ đồ Use Case tổng quan}
 \end{figure}
 
@@ -96,12 +96,12 @@ Người dùng trở về trạng thái chưa đăng nhập. \\ \hline
 \textbf{Tên use case} & Trực quan hóa dữ liệu \\ \hline
 
 \textbf{Mô tả} & 
-Cho phép nhà phân tích quan sát dữ liệu giao thông dưới dạng biểu đồ như: biểu đồ thời gian, biểu đồ phân phối, heatmap, hoặc biểu đồ so sánh nhằm hỗ trợ việc phân tích. \\ \hline
+Cho phép người dùng quan sát dữ liệu giao thông dưới dạng biểu đồ như: biểu đồ thời gian, biểu đồ phân phối, heatmap, hoặc biểu đồ so sánh nhằm hỗ trợ việc phân tích. \\ \hline
 
 \textbf{Tác nhân} & Người dùng. \\ \hline
 
 \textbf{Điều kiện kích hoạt} & 
-Người dùng yêu cầu xem dữ liệu hoặc xem kết quả xử lý dữ liệu ở dạng biểu đồ. \\ \hline
+Người dùng yêu cầu xem dữ liệu ở dạng biểu đồ. \\ \hline
 
 \textbf{Điều kiện tiên quyết} &
 Dữ liệu giao thông đã được tiền xử lý và sẵn sàng để hiển thị. \\ \hline
@@ -113,7 +113,7 @@ Biểu đồ hoặc hình ảnh trực quan được tạo và hiển thị đ�
 1. Người dùng chọn khu vực muốn xem (có thể là đoạn đường, phường hoặc quận). \newline
 2. Chọn loại biểu đồ muốn hiển thị. \newline
 3. Hệ thống xử lý và tạo biểu đồ tương ứng. \newline
-4. Biểu đồ được hiển thị cho nhà phân tích xem hoặc lưu lại. \\ \hline
+4. Biểu đồ được hiển thị cho người dùng xem hoặc lưu lại. \\ \hline
 
 \textbf{Luồng rẽ nhánh} & 
 3a. Nếu dữ liệu thiếu hoặc không hợp lệ, hệ thống sẽ hiển thị thông báo lỗi. \\ \hline
@@ -146,7 +146,7 @@ Người dùng yêu cầu xem kết quả phân tích trên nền bản đồ. \
 Dữ liệu có chứa thông tin không gian (đoạn đường, tọa độ, hoặc dạng network). \\ \hline
 
 \textbf{Điều kiện sau hành động} &
-Hiển thị bản đồ với các tuyến đường được tô màu theo giá trị tương ứng; nhà phân tích có thể quan sát và ghi nhận kết quả. \\ \hline
+Hiển thị bản đồ với các tuyến đường được tô màu theo giá trị tương ứng; người dùng có thể quan sát và ghi nhận kết quả. \\ \hline
 
 \textbf{Luồng chính} &
 1. Người dùng chọn khu vực cần hiển thị. \newline
@@ -208,7 +208,7 @@ Người dùng xem được kết quả phân tích hoặc nhận thông báo n�
 \textbf{Tên use case} & Xuất báo cáo phân tích \\ \hline
 
 \textbf{Mô tả} & 
-Cho phép nhà phân tích xuất các kết quả phân tích (biểu đồ, bảng số liệu, bản đồ, thống kê) thành tệp tin như PDF, CSV hoặc hình ảnh phục vụ trình bày hoặc báo cáo nghiên cứu. \\ \hline
+Cho phép người dùng xuất các kết quả phân tích (biểu đồ, bảng số liệu, bản đồ, thống kê) thành tệp tin như PDF, CSV hoặc hình ảnh phục vụ trình bày hoặc báo cáo nghiên cứu. \\ \hline
 
 \textbf{Tác nhân} & Người dùng. \\ \hline
 
@@ -251,7 +251,7 @@ Hệ thống tạo file báo cáo hoặc hình ảnh và cung cấp cho người
 \textbf{Tên use case} & Dự báo lan truyền ùn tắc giao thông \\ \hline
 
 \textbf{Mô tả} & 
-Cho phép người dùng xem dự báo việc một nút giao thông bị tắc nghẽn sẽ ảnh hưởng và lan truyền đến các nút giao thông lân cận nào trong mạng lưới giao thông, đồng thời ước lượng khoảng thời gian lan truyền. \\ \hline
+Cho phép người dùng xem dự báo việc một nút giao thông bị tắc nghẽn sẽ ảnh hưởng và lan truyền đến các nút giao thông lân cận nào trong mạng lưới giao thông. \\ \hline
 
 \textbf{Tác nhân} & Người dùng. \\ \hline
 
@@ -259,24 +259,23 @@ Cho phép người dùng xem dự báo việc một nút giao thông bị tắc 
 Người dùng chọn một nút giao thông đang hoặc có nguy cơ bị tắc nghẽn và yêu cầu hệ thống thực hiện dự báo lan truyền. \\ \hline
 
 \textbf{Điều kiện tiên quyết} &
-Dữ liệu giao thông đã được thu thập và tiền xử lý. Mạng lưới giao thông đã được xây dựng. Hệ thống có mô hình hoặc thuật toán dự báo lan truyền ùn tắc.\\ \hline
+Dữ liệu giao thông đã được thu thập và tiền xử lý. Mạng lưới giao thông đã được xây dựng. \\ \hline
 
 \textbf{Điều kiện sau hành động} &
-Kết quả dự báo được tạo ra, bao gồm danh sách các nút bị ảnh hưởng và thời gian lan truyền tương ứng. \\ \hline
+Kết quả dự báo được tạo ra, bao gồm danh sách các nút bị ảnh hưởng. \\ \hline
 
 \textbf{Luồng chính} &
 1. Người dùng chọn nút giao thông cần dự báo. \newline
-2. Người dùng chọn khoảng thời gian dự báo. \newline
-3. Hệ thống truy xuất dữ liệu giao thông và cấu trúc mạng lưới liên quan. \newline
-4. Hệ thống thực hiện mô phỏng hoặc mô hình dự báo lan truyền ùn tắc. \newline
-5. Hệ thống xác định các nút giao thông bị ảnh hưởng và thời gian lan truyền. \newline
-6. Kết quả dự báo được hiển thị dưới dạng bản đồ, biểu đồ hoặc bảng số liệu. \\ \hline
+2. Hệ thống truy xuất dữ liệu giao thông và cấu trúc mạng lưới liên quan. \newline
+3. Hệ thống thực hiện mô phỏng hoặc mô hình dự báo lan truyền ùn tắc. \newline
+4. Hệ thống xác định các nút giao thông bị ảnh hưởng. \newline
+5. Kết quả dự báo được hiển thị dưới dạng bản đồ, biểu đồ hoặc bảng số liệu. \\ \hline
 
 \textbf{Luồng rẽ nhánh} &
 4a. Nếu dữ liệu không đủ hoặc mô hình không hội tụ, hệ thống hiển thị thông báo lỗi hoặc cảnh báo độ tin cậy thấp. \\ \hline
 
 \textbf{Kết quả} &
-Người dùng quan sát được phạm vi lan truyền ùn tắc và thời gian ảnh hưởng, hoặc nhận thông báo nếu dự báo không khả thi. \\ \hline
+Người dùng quan sát được phạm vi lan truyền ùn tắc, hoặc nhận thông báo nếu dự báo không khả thi. \\ \hline
 \end{tabular}
 \end{table}
 
@@ -354,4 +353,13 @@ Người dùng quan sát được phạm vi lan truyền ùn tắc và thời gi
     \centering
     \includegraphics[width=1\linewidth]{Images/Sequence diagram/Predict.png}
     \caption{Sơ đồ Sequence dự báo lan truyền ùn tắc giao thông}
+\end{figure}
+
+\subsubsection{Mô hình hóa dữ liệu}
+Dưới đây là sơ đồ thực thể-quan hệ dùng để mô tả tệp mẫu dữ liệu đầu vào của hệ thống.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Images/ERD.png}
+    \caption{ERD biểu diễn cho dữ liệu đầu vào mẫu}
 \end{figure}

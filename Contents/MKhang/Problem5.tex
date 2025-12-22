@@ -1,0 +1,89 @@
+\subsection{Biểu diễn không gian bằng Laplacian Positional Encoding}
+\label{subsec:laplacian_pe}
+
+Trong các mô hình Transformer tiêu chuẩn, cơ chế self-attention không tự thân nắm bắt được
+thông tin vị trí hay cấu trúc của các phần tử đầu vào, mà cần được bổ sung thông qua các cơ
+chế mã hóa vị trí (positional encoding). Đối với dữ liệu chuỗi, vị trí có thể được xác định
+một cách tự nhiên theo trật tự thời gian. Tuy nhiên, trong bài toán giao thông trên đồ thị,
+các tuyến đường không được sắp xếp theo một trật tự tuyến tính cố định, mà tồn tại trong
+một không gian phi Euclid được xác định bởi cấu trúc mạng lưới giao thông.
+
+Do đó, để cung cấp thông tin không gian cho mô hình Transformer, nhóm sử dụng
+\textit{Laplacian Positional Encoding}, một phương pháp mã hóa vị trí dựa trên phổ của đồ
+thị, đã được chứng minh là hiệu quả trong các mô hình Transformer cho dữ liệu đồ thị.
+
+\subsubsection{Xây dựng đồ thị không gian trong vùng giao thông}
+\label{subsubsec:zone_graph}
+
+Đối với mỗi vùng giao thông chức năng được xây dựng ở các bước trước, nhóm xem vùng
+này như một đồ thị con $G_z = (V_z, E_z)$ của đồ thị giao thông toàn cục, trong đó mỗi đỉnh
+$v_i \in V_z$ tương ứng với một tuyến đường trong vùng, và các cạnh $E_z$ được xác định
+dựa trên quan hệ kết nối topology giữa các tuyến trong mạng lưới giao thông.
+
+Từ đồ thị con này, một ma trận kề $A_z \in \mathbb{R}^{|V_z| \times |V_z|}$ được xây dựng,
+trong đó $A_z(i,j) = 1$ nếu tồn tại cạnh nối giữa hai tuyến $i$ và $j$ trong đồ thị giao
+thông, và $A_z(i,j) = 0$ trong trường hợp ngược lại. Trên cơ sở đó, ma trận bậc
+$D_z$ được xác định với $D_z(i,i) = \sum_j A_z(i,j)$.
+
+\subsubsection{Laplacian và phân rã phổ}
+\label{subsubsec:laplacian_eigendecomposition}
+
+Ma trận Laplacian của đồ thị vùng được định nghĩa dưới dạng Laplacian tổ hợp:
+\begin{equation}
+L_z = D_z - A_z.
+\end{equation}
+
+Ma trận Laplacian này mã hóa đầy đủ cấu trúc kết nối của vùng giao thông và đóng vai trò
+như một toán tử khuếch tán trên đồ thị. Thực hiện phân rã phổ của $L_z$ cho phép ta thu
+được hệ eigenvalue và eigenvector:
+\begin{equation}
+L_z = U_z \Lambda_z U_z^\top,
+\end{equation}
+trong đó $U_z = [\mathbf{u}_1, \mathbf{u}_2, \dots, \mathbf{u}_{|V_z|}]$ là các eigenvector
+tương ứng với các eigenvalue được sắp xếp theo thứ tự không giảm
+$0 = \lambda_1 \le \lambda_2 \le \dots$.
+
+Trong nghiên cứu này, nhóm chỉ sử dụng $d_{\text{spa}}$ eigenvector ứng với các
+eigenvalue nhỏ nhất (bỏ qua eigenvector hằng ứng với $\lambda_1 = 0$ nếu cần), tạo thành
+ma trận mã hóa vị trí không gian:
+\begin{equation}
+\mathbf{P}_z = [\mathbf{u}_2, \mathbf{u}_3, \dots, \mathbf{u}_{d_{\text{spa}}+1}]
+\in \mathbb{R}^{|V_z| \times d_{\text{spa}}}.
+\end{equation}
+
+Việc lựa chọn các eigenvector bậc thấp tương ứng với các thành phần tần số thấp của đồ
+thị cho phép mã hóa cấu trúc không gian một cách trơn (smooth) và mang tính toàn cục,
+phản ánh vai trò cấu trúc của mỗi tuyến đường trong vùng giao thông.
+
+\subsubsection{Ý nghĩa của eigenvector bậc thấp trong bối cảnh giao thông}
+\label{subsubsec:low_freq_interpretation}
+
+Các eigenvector bậc thấp của Laplacian đồ thị có thể được xem như các ``tọa độ cấu trúc''
+(structural coordinates) của các tuyến đường trong vùng. Các tuyến có vị trí cấu trúc
+gần nhau trong đồ thị (ví dụ cùng nằm ở trung tâm vùng hoặc cùng thuộc rìa vùng) sẽ có
+biểu diễn gần nhau trong không gian phổ, ngay cả khi chúng không kề nhau trực tiếp về
+mặt topology.
+
+Trong bối cảnh giao thông đô thị, điều này đặc biệt quan trọng vì hiện tượng ùn tắc thường
+lan truyền một cách liên tục và có cấu trúc theo vùng, thay vì thay đổi đột ngột trên từng
+tuyến riêng lẻ. Việc sử dụng các eigenvector bậc thấp giúp mô hình nắm bắt được cấu trúc
+không gian tổng thể của vùng giao thông, đồng thời giảm độ nhạy với nhiễu cục bộ hoặc các
+liên kết không ổn định.
+
+\subsubsection{Tích hợp Laplacian Positional Encoding vào Transformer}
+\label{subsubsec:pe_integration}
+
+Ma trận mã hóa vị trí không gian $\mathbf{P}_z$ được sử dụng như một \textit{spatial
+positional encoding} cho các tuyến đường trong vùng giao thông. Đối với mỗi mẫu huấn
+luyện, mã hóa này được ghép với biểu diễn theo thời gian của dữ liệu đầu vào và được cộng
+vào embedding đầu vào của mô hình Transformer.
+
+Bằng cách này, cơ chế self-attention trong Transformer không chỉ dựa trên sự tương đồng
+ngữ nghĩa của các đặc trưng giao thông theo thời gian, mà còn được điều kiện hóa bởi thông
+tin vị trí cấu trúc của các tuyến trong vùng. Điều này cho phép mô hình học được các tương
+tác không gian--thời gian phức tạp và vượt qua các giới hạn của các mô hình dựa trên cơ chế
+truyền thông tin cục bộ truyền thống.
+
+Laplacian Positional Encoding do đó đóng vai trò then chốt trong việc cung cấp thông tin
+không gian cho mô hình Transformer encoder-only, tạo nền tảng cho việc học biểu diễn
+vùng giao thông một cách hiệu quả và có ý nghĩa về mặt cấu trúc.

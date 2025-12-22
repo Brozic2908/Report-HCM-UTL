@@ -1,24 +1,35 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {figure}{\numberline {1}{\ignorespaces Kiến trúc Kappa}}{22}{figure.caption.3}%
-\contentsline {figure}{\numberline {2}{\ignorespaces Kiến trúc tổng thể hệ thống}}{42}{figure.caption.6}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Pipeline thu thập dữ liệu từ TomTom API}}{45}{figure.caption.8}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Kiến trúc mô hình Dynamic GCN với học đồ thị động và mô hình hóa thời gian đa tầng}}{61}{figure.caption.9}%
-\contentsline {figure}{\numberline {5}{\ignorespaces Kiến trúc hệ thống triển khai phân tích và dự báo giao thông}}{71}{figure.caption.11}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Sơ đồ Use Case tổng quan}}{82}{figure.caption.12}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Sơ đồ Use Case đăng nhập và đăng xuất}}{83}{figure.caption.13}%
-\contentsline {figure}{\numberline {8}{\ignorespaces Sơ đồ Use Case trực quan hóa dữ liệu}}{84}{figure.caption.16}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Sơ đồ Use Case hiển thị kết quả phân tích trên bản đồ}}{85}{figure.caption.18}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Sơ đồ Use Case xem và xuất kết quả phân tích}}{86}{figure.caption.20}%
-\contentsline {figure}{\numberline {11}{\ignorespaces Sơ đồ Use Case dự báo ùn tắc giao thông}}{88}{figure.caption.23}%
-\contentsline {figure}{\numberline {12}{\ignorespaces Sơ đồ Activity đăng nhập, đăng xuất}}{90}{figure.caption.25}%
-\contentsline {figure}{\numberline {13}{\ignorespaces Sơ đồ Activity trực quan hóa dữ liệu}}{91}{figure.caption.26}%
-\contentsline {figure}{\numberline {14}{\ignorespaces Sơ đồ Activity xem kết quả dạng bản đồ}}{92}{figure.caption.27}%
-\contentsline {figure}{\numberline {15}{\ignorespaces Sơ đồ Activity xem và xuất kết quả phân tích}}{93}{figure.caption.28}%
-\contentsline {figure}{\numberline {16}{\ignorespaces Sơ đồ Activity dự báo lan truyền ùn tắc giao thông}}{94}{figure.caption.29}%
-\contentsline {figure}{\numberline {17}{\ignorespaces Sơ đồ Sequence đăng nhập}}{95}{figure.caption.30}%
-\contentsline {figure}{\numberline {18}{\ignorespaces Sơ đồ Sequence đăng xuất}}{95}{figure.caption.31}%
-\contentsline {figure}{\numberline {19}{\ignorespaces Sơ đồ Sequence trực quan hóa dữ liệu}}{96}{figure.caption.32}%
-\contentsline {figure}{\numberline {20}{\ignorespaces Sơ đồ Sequence xem kết quả dạng bản đồ}}{96}{figure.caption.33}%
-\contentsline {figure}{\numberline {21}{\ignorespaces Sơ đồ Sequence xem kết quả phân tích}}{97}{figure.caption.34}%
-\contentsline {figure}{\numberline {22}{\ignorespaces Sơ đồ Sequence xuất kết quả phân tích}}{97}{figure.caption.35}%
-\contentsline {figure}{\numberline {23}{\ignorespaces Sơ đồ Sequence dự báo lan truyền ùn tắc giao thông}}{98}{figure.caption.36}%
+\contentsline {figure}{\numberline {1}{\ignorespaces Kiến trúc Kappa với BERT Model Integration}}{26}{figure.caption.4}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Kiến trúc Data Pipeline thu thập và xử lý dữ liệu}}{45}{figure.caption.7}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Kiến trúc mô hình Transformer encoder-only với Spatial và Temporal Encoding}}{61}{figure.caption.9}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Kết quả của Epoch 149}}{64}{figure.caption.11}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Kết quả của Epoch 150}}{65}{figure.caption.13}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Hàm loss qua các epoch}}{66}{figure.caption.14}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Accuracy, Precision, Recall, F1-score trên train, valid, test qua các epoch}}{67}{figure.caption.15}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Precision-Recall curve}}{68}{figure.caption.17}%
+\contentsline {figure}{\numberline {9}{\ignorespaces ROC,AUC}}{69}{figure.caption.18}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Ma trận nhầm lẫn}}{70}{figure.caption.19}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Epoch 149}}{71}{figure.caption.21}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Hàm loss qua các epoch}}{72}{figure.caption.22}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Precision-Recall curve}}{72}{figure.caption.23}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Precision-Recall curve}}{73}{figure.caption.24}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Sơ đồ Use Case tổng quan}}{80}{figure.caption.25}%
+\contentsline {figure}{\numberline {16}{\ignorespaces Sơ đồ Use Case đăng nhập và đăng xuất}}{81}{figure.caption.26}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Sơ đồ Use Case trực quan hóa dữ liệu}}{82}{figure.caption.29}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Sơ đồ Use Case hiển thị kết quả phân tích trên bản đồ}}{83}{figure.caption.31}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Sơ đồ Use Case xem và xuất kết quả phân tích}}{84}{figure.caption.33}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Sơ đồ Use Case dự báo ùn tắc giao thông}}{86}{figure.caption.36}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Sơ đồ Activity đăng nhập, đăng xuất}}{87}{figure.caption.38}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Sơ đồ Activity trực quan hóa dữ liệu}}{88}{figure.caption.39}%
+\contentsline {figure}{\numberline {23}{\ignorespaces Sơ đồ Activity xem kết quả dạng bản đồ}}{89}{figure.caption.40}%
+\contentsline {figure}{\numberline {24}{\ignorespaces Sơ đồ Activity xem và xuất kết quả phân tích}}{90}{figure.caption.41}%
+\contentsline {figure}{\numberline {25}{\ignorespaces Sơ đồ Activity dự báo lan truyền ùn tắc giao thông}}{91}{figure.caption.42}%
+\contentsline {figure}{\numberline {26}{\ignorespaces Sơ đồ Sequence đăng nhập}}{92}{figure.caption.43}%
+\contentsline {figure}{\numberline {27}{\ignorespaces Sơ đồ Sequence đăng xuất}}{92}{figure.caption.44}%
+\contentsline {figure}{\numberline {28}{\ignorespaces Sơ đồ Sequence trực quan hóa dữ liệu}}{93}{figure.caption.45}%
+\contentsline {figure}{\numberline {29}{\ignorespaces Sơ đồ Sequence xem kết quả dạng bản đồ}}{93}{figure.caption.46}%
+\contentsline {figure}{\numberline {30}{\ignorespaces Sơ đồ Sequence xem kết quả phân tích}}{94}{figure.caption.47}%
+\contentsline {figure}{\numberline {31}{\ignorespaces Sơ đồ Sequence xuất kết quả phân tích}}{94}{figure.caption.48}%
+\contentsline {figure}{\numberline {32}{\ignorespaces Sơ đồ Sequence dự báo lan truyền ùn tắc giao thông}}{95}{figure.caption.49}%
+\contentsline {figure}{\numberline {33}{\ignorespaces ERD biểu diễn cho dữ liệu đầu vào mẫu}}{96}{figure.caption.50}%
+\contentsline {figure}{\numberline {34}{\ignorespaces Sơ đồ ERD dữ liệu giao thông theo Chen notation}}{104}{figure.caption.51}%
