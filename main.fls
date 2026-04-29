@@ -1,6 +1,6 @@
-PWD c:\1_Workspace\4_Nam_4\1_HocKy_251\1_Do_An_Chuyen_Nganh\Báo_Cáo_Đồ_Án_Chuyên_Ngành
+PWD c:\1_Workspace\4_Nam_4\2_HocKy_252\1_Do_An_Chuyen_Nganh\Báo_Cáo_Đồ_Án_Chuyên_Ngành
 INPUT C:\Users\khanh\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\1_Workspace\4_Nam_4\1_HocKy_251\1_Do_An_Chuyen_Nganh\Báo_Cáo_Đồ_Án_Chuyên_Ngành\main.tex
+INPUT c:\1_Workspace\4_Nam_4\2_HocKy_252\1_Do_An_Chuyen_Nganh\Báo_Cáo_Đồ_Án_Chuyên_Ngành\main.tex
 OUTPUT main.log
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
@@ -598,6 +598,10 @@ INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
 OUTPUT main.toc
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -606,10 +610,6 @@ INPUT .\Images\hcmut.png
 INPUT .\main.lof
 INPUT .\main.lof
 INPUT main.lof
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
 OUTPUT main.lof
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -618,6 +618,10 @@ INPUT .\Images\hcmut.png
 INPUT .\main.lot
 INPUT .\main.lot
 INPUT main.lot
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\lm\t5lmtt.fd
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\lm\t5lmtt.fd
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\lm\t5lmtt.fd
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmtt12.tfm
 OUTPUT main.lot
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -778,10 +782,6 @@ INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
-INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\lm\t5lmtt.fd
-INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\lm\t5lmtt.fd
-INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\tex\latex\lm\t5lmtt.fd
-INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmtt12.tfm
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -1161,20 +1161,13 @@ INPUT .\Contents\6_PhanTichThietKeHeThong.tex
 INPUT .\Contents\6_PhanTichThietKeHeThong.tex
 INPUT .\Contents\6_PhanTichThietKeHeThong.tex
 INPUT Contents\6_PhanTichThietKeHeThong.tex
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase tổng quan.png
-INPUT .\Images\Usecase1.png
-INPUT .\Images\Usecase1.png
-INPUT .\Images\Usecase1.png
-INPUT .\Images\Usecase1.png
-INPUT .\Images\Usecase1.png
-INPUT .\Images\Usecase1.png
-INPUT .\Images\Usecase1.png
+INPUT .\Images\Architecture\architecture.png
+INPUT .\Images\Architecture\architecture.png
+INPUT .\Images\Architecture\architecture.png
+INPUT .\Images\Architecture\architecture.png
+INPUT .\Images\Architecture\architecture.png
+INPUT .\Images\Architecture\architecture.png
+INPUT .\Images\Architecture\architecture.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -1183,101 +1176,6 @@ INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\Usecase2.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\Usecase3.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\Usecase4.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\Usecase5.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\Act đăng nhập, đăng xuất.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\Act trực quan hóa dữ liệu.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\Act xem kết quả dạng bản đồ.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\Act xem và xuất báo cáo.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\hcmut.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
-INPUT .\Images\Act dự báo lan truyền ùn tắc.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -1286,74 +1184,83 @@ INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Login.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Logout.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
-INPUT .\Images\Sequence diagram\Visualize Data.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\Analysis Results Map.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
-INPUT .\Images\Sequence diagram\View Analysis Results.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Export Report.png
-INPUT .\Images\Sequence diagram\Predict.png
-INPUT .\Images\Sequence diagram\Predict.png
-INPUT .\Images\Sequence diagram\Predict.png
-INPUT .\Images\Sequence diagram\Predict.png
-INPUT .\Images\Sequence diagram\Predict.png
-INPUT .\Images\Sequence diagram\Predict.png
-INPUT .\Images\Sequence diagram\Predict.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
-INPUT .\Images\ERD.png
-INPUT .\Images\ERD.png
-INPUT .\Images\ERD.png
-INPUT .\Images\ERD.png
-INPUT .\Images\ERD.png
-INPUT .\Images\ERD.png
-INPUT .\Images\ERD.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\ERD\ERD.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmtk10.tfm
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\t5-lmtti10.tfm
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
+INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -1414,6 +1321,9 @@ INPUT .\Images\ERD.png
 INPUT .\Images\ERD.png
 INPUT .\Images\ERD.png
 INPUT .\Images\ERD.png
+INPUT .\Images\ERD.png
+INPUT .\Images\ERD.png
+INPUT .\Images\ERD.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
 INPUT .\Images\hcmut.png
@@ -1463,9 +1373,13 @@ INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmsy6.p
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmsy6.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmsy8.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmsy8.pfb
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtk10.pfb
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtk10.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtt10.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtt10.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtt12.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtt12.pfb
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtti10.pfb
+INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtti10.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\symbols\msbm10.pfb
 INPUT C:\Users\khanh\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\symbols\msbm10.pfb

@@ -1,11 +1,12 @@
+\clearpage
 \section{Phân tích \& Thiết kế hệ thống}
 \subsection{Kiến trúc tổng thể hệ thống}
 
-Hệ thống UTraffic được thiết kế theo mô hình \textbf{microservice} kết hợp với \textbf{kiến trúc Kappa} (Kappa Architecture) nhằm đảm bảo khả năng xử lý dữ liệu giao thông thời gian thực, đồng thời hỗ trợ các tác vụ phân tích và dự báo phức tạp dựa trên mô hình học sâu trên đồ thị (T-GCN). Toàn bộ hệ thống được tổ chức thành 6 tầng chức năng độc lập nhưng liên kết chặt chẽ với nhau, bao gồm: tầng thu thập dữ liệu, tầng xử lý luồng, tầng lưu trữ lai ghép, tầng học máy không gian - thời gian, tầng phục vụ và tầng giám sát.
+Hệ thống UTraffic được thiết kế theo mô hình \textbf{microservice} kết hợp với \textbf{kiến trúc Kappa} (Kappa Architecture) nhằm đảm bảo khả năng xử lý dữ liệu giao thông thời gian thực, đồng thời hỗ trợ các tác vụ phân tích và dự báo phức tạp dựa trên mô hình học sâu trên đồ thị (T-GCN). Toàn bộ hệ thống được tổ chức thành 5 tầng chức năng độc lập nhưng liên kết chặt chẽ với nhau, bao gồm: tầng thu thập dữ liệu, tầng xử lý luồng, tầng lưu trữ lai ghép, tầng học máy không gian - thời gian, và tầng phục vụ.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Images/Architecture/architecture.png}
+    \includegraphics[width=\textwidth]{images/architecture.png}
     \caption{Kiến trúc tổng thể hệ thống UTraffic}
     \label{fig:architecture}
 \end{figure}
@@ -15,12 +16,12 @@ Hệ thống UTraffic được thiết kế theo mô hình \textbf{microservice}
 Hệ thống tiếp nhận dữ liệu giao thông từ hai nguồn chính:
 
 \begin{itemize}
-    \item \textbf{TomTom Traffic Stats API:} Cung cấp dữ liệu tốc độ thực tế theo từng phân đoạn đường (road segment) với độ phân giải thời gian 15 phút. Dữ liệu bao gồm các thuộc tính: tốc độ trung bình (\texttt{average\_speed}), tốc độ điều hòa (\texttt{harmonic\_average\_speed}), tốc độ trung vị (\texttt{median\_speed}), thời gian di chuyển (\texttt{average\_travel\_time}), tỉ lệ thời gian di chuyển so với điều kiện lý tưởng (\texttt{travel\_time\_ratio}), và kích thước mẫu \newline (\texttt{sample\_size}). Dữ liệu được thu thập theo mô hình batch job từ TomTom Movement Stats API, bao gồm 31 ngày × 24 khung giờ 15 phút/ngày cho các phân đoạn đường thuộc khu vực nghiên cứu tại TP.HCM (bounding box: lat 10.760--10.805, lon 106.675--106.715).
+    \item \textbf{TomTom Traffic Stats API:} Cung cấp dữ liệu tốc độ thực tế theo từng phân đoạn đường (road segment) với độ phân giải thời gian 15 phút. Dữ liệu bao gồm các thuộc tính: tốc độ trung bình (\texttt{average\_speed}), tốc độ điều hòa (\texttt{harmonic\_average\_speed}), tốc độ trung vị (\texttt{median\_speed}), thời gian di chuyển (\texttt{average\_travel\_time}), tỉ lệ thời gian di chuyển so với điều kiện lý tưởng (\texttt{travel\_time\_ratio}), và kích thước mẫu (\texttt{sample\_size}). Dữ liệu được thu thập theo mô hình batch job từ TomTom Movement Stats API, bao gồm 31 ngày × 24 khung giờ 15 phút/ngày cho các phân đoạn đường thuộc khu vực nghiên cứu tại TP.HCM (bounding box: lat 10.760--10.805, lon 106.675--106.715).
 
     \item \textbf{OpenStreetMap API (OSMnx):} Cung cấp dữ liệu topo học đường bộ dưới dạng đồ thị định hướng, bao gồm các node (giao lộ) với tọa độ địa lý và các edge (đoạn đường) với các thuộc tính như chiều dài, tốc độ giới hạn, số làn xe, và loại đường (\texttt{highway type}). Dữ liệu OSM được lưu cache dưới định dạng \texttt{.graphml} để tránh tải lại mỗi lần chạy pipeline.
 \end{itemize}
 
-\subsection{Tầng xử lý luồng (Kappa Architecture -- Stream \\ Processing Engine)}
+\subsection{Tầng xử lý luồng (Kappa Architecture -- Stream Processing Engine)}
 
 Kiến trúc Kappa được lựa chọn thay cho kiến trúc Lambda nhằm đơn giản hóa hệ thống bằng cách xử lý tất cả dữ liệu thông qua một luồng duy nhất, loại bỏ sự phức tạp của việc duy trì song song hai lớp batch và streaming. Tầng xử lý bao gồm các thành phần sau:
 
@@ -110,7 +111,7 @@ Backend được xây dựng bằng \textbf{FastAPI} theo mô hình microservice
 
 \begin{itemize}
     \item \textbf{Auth Service -- JWT:} Quản lý đăng ký, đăng nhập, làm mới token (refresh token rotation), và thu hồi token. Sử dụng Redis-Auth để blacklist JWT khi người dùng đăng xuất.
-    \item \textbf{Correlation Service:} Cung cấp API trả về top-K node tương quan với một node cho trước. Ưu tiên đọc từ Redis-Corr cache; trong trường hợp cache miss mới truy vấn PostgreSQL.
+    \item \textbf{Correlation Service:} Cung cấp API trả về top-K node tương quan với một node cho trước. Ưu tiên đọc từ Redis-Corr cache; trong trường hợp cache miss mới truy vấn PostgreSQL (\texttt{node\_correlation\_cache}).
     \item \textbf{Prediction Service:} Cung cấp API trả về dự báo tắc nghẽn theo horizon cho một hoặc nhiều node. Kết hợp dữ liệu từ Redis-Pred và PostgreSQL.
     \item \textbf{Traffic Service:} Cung cấp API phục vụ bản đồ Folium, bao gồm: truy vấn node/edge theo bounding box (sử dụng PostGIS), thống kê tốc độ theo giờ, và dữ liệu topo học đồ thị.
 \end{itemize}
@@ -152,11 +153,11 @@ Luồng dữ liệu chính của hệ thống có thể tóm tắt qua các bư�
 \clearpage
 \subsection{Thiết kế cơ sở dữ liệu}
 
-Hệ thống UTraffic sử dụng \textbf{PostgreSQL} (kết hợp extension \textbf{PostGIS} và \newline \textbf{TimescaleDB}) làm cơ sở dữ liệu chính. Thiết kế gồm 14 bảng được tổ chức thành 5 nhóm chức năng: xác thực người dùng, topo học đồ thị đường bộ, dữ liệu giao thông thời gian thực, học máy và phiên bản mô hình, phân tích tương quan. Sơ đồ ERD tổng thể được trình bày trong Hình \ref{fig:erd}.
+Hệ thống UTraffic sử dụng \textbf{PostgreSQL} (kết hợp extension \textbf{PostGIS} và \textbf{TimescaleDB}) làm cơ sở dữ liệu chính. Thiết kế gồm 15 bảng được tổ chức thành 5 nhóm chức năng: xác thực người dùng, topo học đồ thị đường bộ, dữ liệu giao thông thời gian thực, học máy và phiên bản mô hình, phân tích tương quan. Sơ đồ ERD tổng thể được trình bày trong Hình \ref{fig:erd}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Images/ERD/ERD.png}
+    \includegraphics[width=\textwidth]{images/erd.png}
     \caption{Sơ đồ ERD cơ sở dữ liệu hệ thống UTraffic}
     \label{fig:erd}
 \end{figure}
@@ -289,6 +290,7 @@ Lưu phiên bản hóa cấu trúc đồ thị. Mỗi khi pipeline map matching 
 \texttt{id} & UUID & PK & Định danh duy nhất \\
 \texttt{edge\_id} & UUID & FK $\to$ edges & Cạnh được quan sát \\
 \texttt{observed\_at} & TIMESTAMP & NOT NULL & Thời điểm quan sát \\
+\texttt{time\_slot} & VARCHAR & & Tên slot (VD: Slot\_0700) \\
 \texttt{average\_speed} & FLOAT & & Tốc độ trung bình (km/h) \\
 \texttt{harmonic\_avg\_speed} & FLOAT & & Tốc độ điều hòa (km/h) \\
 \texttt{median\_speed} & FLOAT & & Tốc độ trung vị (km/h) \\
@@ -308,43 +310,34 @@ SELECT create_hypertable('traffic_observations', 'observed_at',
     chunk_time_interval => INTERVAL '1 week');
 \end{verbatim}
 
-Tốc độ ghi ước tính: với 385 node × 24 khung giờ/ngày $\approx$ 9.240 bản ghi/ngày (ở level edge sau map matching còn nhiều hơn). TimescaleDB continuous \newline aggregate được định nghĩa cho bảng \texttt{hourly\_traffic\_stats} để tính toán thống kê theo giờ mà không cần query toàn bộ bảng gốc.
+Tốc độ ghi ước tính: với 385 node × 24 khung giờ/ngày ≈ 9.240 bản ghi/ngày (ở level edge sau map matching còn nhiều hơn). TimescaleDB continuous aggregate được định nghĩa cho bảng \texttt{hourly\_traffic\_stats} để tính toán thống kê theo giờ mà không cần query toàn bộ bảng gốc.
 
 \paragraph{Bảng \texttt{hourly\_traffic\_stats}}
-Bảng aggregate tổng hợp theo giờ, được duy trì tự động bởi TimescaleDB continuous aggregate policy. Khóa chính composite là \texttt{(bucket, edge\_id)}, trong đó \texttt{bucket} là timestamp đã làm tròn theo giờ bằng hàm \texttt{time\_bucket('1 hour', observed\_at)}.
+Bảng aggregate tổng hợp theo giờ, được duy trì tự động bởi TimescaleDB continuous aggregate policy. Khóa chính composite là \texttt{(bucket, edge\_id)}, trong đó \texttt{bucket} là timestamp đã làm tròn theo giờ bằng hàm \texttt{time\_bucket('1 hour', observed\_at)}. Bảng này bổ sung thêm cột \texttt{node\_id} để hỗ trợ truy vấn thống kê trực tiếp theo node mà không cần join với bảng \texttt{edges}.
 
 \subsubsection{Nhóm bảng học máy và phiên bản mô hình (ML \& Model Versioning)}
 
 \paragraph{Bảng \texttt{model\_versions}}
-Lưu thông tin về các phiên bản mô hình đã được huấn luyện và triển khai trong hệ thống. 
-Mỗi bản ghi tương ứng với một phiên bản mô hình cụ thể, gắn với một snapshot đồ thị qua cột \texttt{graph\_snapshot\_id}. 
-Khác với thiết kế cũ, các chỉ số đánh giá tổng hợp của mô hình như \texttt{rmse}, \texttt{mae}, \texttt{r2} được lưu trực tiếp trong bảng này, thay vì gom trong cột JSONB \texttt{metrics\_by\_horizon}. 
-Bảng cũng lưu các siêu tham số chính phục vụ tái lập huấn luyện và suy luận như \texttt{num\_nodes}, \texttt{input\_dim}, \texttt{hidden\_dim}, \texttt{seq\_len}, \texttt{pred\_len}. 
-Cột \texttt{checkpoint\_path} trỏ tới tệp checkpoint của mô hình đã huấn luyện trên Object Storage hoặc Local Disk. 
-Tại một thời điểm, chỉ một bản ghi có \texttt{is\_active = true} được chọn để phục vụ inference.
+Lưu thông tin về các phiên bản mô hình đã huấn luyện. Cột \texttt{metrics\_by\_horizon} là JSONB chứa metrics tổng hợp của cả 4 horizon. Cột \texttt{checkpoint\_path} trỏ tới file \texttt{best\_model.pth} trên S3 hoặc Local Disk. Chỉ một bản ghi có \texttt{is\_active = true} được sử dụng cho inference ở bất kỳ thời điểm nào.
+
+\paragraph{Bảng \texttt{model\_horizon\_metrics}}
+Tách riêng metrics theo từng horizon (1--4) để hỗ trợ so sánh hiệu năng mô hình theo mốc dự báo cụ thể. Với mỗi \texttt{model\_version\_id}, bảng này có đúng 4 bản ghi tương ứng horizon 1, 2, 3, 4.
 
 \begin{table}[H]
 \centering
-\caption{Cấu trúc bảng \texttt{model\_versions}}
+\caption{Cấu trúc bảng \texttt{model\_horizon\_metrics}}
 \begin{tabular}{|l|l|l|p{5cm}|}
 \hline
 \textbf{Cột} & \textbf{Kiểu dữ liệu} & \textbf{Ràng buộc} & \textbf{Mô tả} \\
 \hline
-\texttt{id} & UUID & PK & Định danh duy nhất của phiên bản mô hình \\
-\texttt{model\_name} & VARCHAR & NOT NULL & Tên mô hình \\
-\texttt{version} & VARCHAR & NOT NULL & Nhãn phiên bản mô hình \\
-\texttt{graph\_snapshot\_id} & UUID & FK $\to$ graph\_snapshots & Snapshot đồ thị được dùng để huấn luyện mô hình \\
-\texttt{num\_nodes} & INTEGER & & Số nút đầu vào của đồ thị \\
-\texttt{input\_dim} & INTEGER & & Số chiều đặc trưng đầu vào \\
-\texttt{hidden\_dim} & INTEGER & & Số chiều lớp ẩn của mô hình \\
-\texttt{seq\_len} & INTEGER & & Độ dài chuỗi đầu vào \\
-\texttt{pred\_len} & INTEGER & & Số bước dự báo đầu ra \\
-\texttt{rmse} & FLOAT & & Sai số RMSE tổng hợp của mô hình \\
-\texttt{mae} & FLOAT & & Sai số MAE tổng hợp của mô hình \\
+\texttt{id} & UUID & PK & Định danh duy nhất \\
+\texttt{model\_version\_id} & UUID & FK $\to$ model\_versions & Phiên bản mô hình \\
+\texttt{horizon\_step} & INTEGER & NOT NULL & Bước dự báo (1--4) \\
+\texttt{rmse} & FLOAT & & Root Mean Squared Error \\
+\texttt{mae} & FLOAT & & Mean Absolute Error \\
+\texttt{accuracy} & FLOAT & & Accuracy (%) \\
 \texttt{r2} & FLOAT & & Hệ số xác định R\textsuperscript{2} \\
-\texttt{checkpoint\_path} & VARCHAR & & Đường dẫn tới tệp checkpoint mô hình \\
-\texttt{is\_active} & BOOLEAN & & Đánh dấu phiên bản đang được dùng cho suy luận \\
-\texttt{trained\_at} & TIMESTAMP & & Thời điểm hoàn tất huấn luyện \\
+\texttt{var\_score} & FLOAT & & Explained Variance Score \\
 \hline
 \end{tabular}
 \end{table}
@@ -381,52 +374,27 @@ Lưu kết quả dự báo tốc độ từ T-GCN. Mỗi lần chạy prediction
 Đây là nhóm bảng phục vụ tính năng cốt lõi của hệ thống: hiển thị mối tương quan giữa các nút giao thông khi người dùng click vào bản đồ.
 
 \paragraph{Bảng \texttt{correlation\_snapshots}}
-Lưu metadata của mỗi lần chạy tác vụ tính tương quan trong mạng lưới giao thông. 
-Mỗi bản ghi gắn với một phiên bản mô hình thông qua cột \texttt{model\_version\_id}, đồng thời lưu phương pháp tính tương quan tại cột \texttt{method} và chế độ xử lý tại cột \texttt{mode}. 
-Cột \texttt{num\_nodes} cho biết số lượng node tham gia tính toán trong snapshot đó. 
-Các thống kê tổng hợp như \texttt{mean\_corr} và \texttt{std\_corr} phản ánh phân bố chung của các hệ số tương quan trong toàn mạng. 
-Cột \texttt{npz\_path} trỏ tới tệp nhị phân chứa ma trận tương quan hoặc dữ liệu tương quan đã được lưu trên Local Disk. 
-Cột \texttt{computed\_at} ghi nhận thời điểm hoàn tất quá trình tính toán snapshot.
+Lưu metadata của mỗi lần chạy correlation job. Cột \texttt{npz\_path} trỏ tới file ma trận tương quan đầy đủ $385 \times 385$ trên Local Disk/S3. Cột \texttt{threshold\_stored} ghi nhận ngưỡng lọc đã áp dụng khi ghi vào bảng \texttt{node\_correlations} (mặc định $\geq 0.7$). Chỉ một snapshot có \texttt{is\_active = true} được serve bởi API tại bất kỳ thời điểm nào.
+
+\paragraph{Bảng \texttt{node\_correlations}}
+Lưu các cặp node có mức độ tương quan đáng kể. Từ dữ liệu thực tế, với ngưỡng $|corr| \geq 0.7$, bảng này chứa khoảng 34.307 cặp. Hai cột \texttt{rank\_from\_a} và \texttt{rank\_from\_b} ghi nhận thứ hạng của cặp này trong danh sách láng giềng của node A và node B tương ứng (xếp theo chiều giảm dần của $|corr|$), hỗ trợ API trả về top-K neighbors một cách hiệu quả.
 
 \begin{table}[H]
 \centering
-\caption{Cấu trúc bảng \texttt{correlation\_snapshots}}
+\caption{Cấu trúc bảng \texttt{node\_correlations}}
 \begin{tabular}{|l|l|l|p{5cm}|}
 \hline
 \textbf{Cột} & \textbf{Kiểu dữ liệu} & \textbf{Ràng buộc} & \textbf{Mô tả} \\
 \hline
 \texttt{id} & UUID & PK & Định danh duy nhất \\
-\texttt{model\_version\_id} & UUID & FK $\to$ model\_versions & Mô hình sinh dự báo \\
-\texttt{method} & VARCHAR & & Phương pháp tính tương quan \\
-\texttt{mode} & VARCHAR & & Chế độ chạy correlation job \\
-\texttt{num\_nodes} & INTEGER & & Số lượng node được đưa vào tính toán \\
-\texttt{mean\_corr} & FLOAT & & Giá trị trung bình của các hệ số tương quan \\
-\texttt{std\_corr} & FLOAT & & Độ lệch chuẩn của các hệ số tương quan \\
-\texttt{npz\_path} & VARCHAR & & Đường dẫn tới tệp lưu dữ liệu tương quan \\
-\texttt{computed\_at} & TIMESTAMP & & Thời điểm hoàn tất tính toán snapshot \\
-\hline
-\end{tabular}
-\end{table}
-
-\paragraph{Bảng \texttt{node\_correlations}}
-Lưu các cặp node và hệ số tương quan tương ứng trong một snapshot cụ thể. 
-Mỗi bản ghi thuộc về một lần tính toán correlation thông qua cột \texttt{snapshot\_id}, đồng thời tham chiếu đến hai node liên quan qua \texttt{node\_a\_id} và \texttt{node\_b\_id}. 
-Cột \texttt{correlation\_value} lưu giá trị hệ số tương quan giữa hai node, còn cột \texttt{is\_adjacent} cho biết hai node này có kề nhau trực tiếp trong đồ thị giao thông hay không. 
-Khác với thiết kế cũ, bảng hiện tại không lưu các cột xếp hạng như \texttt{rank\_from\_a}, \texttt{rank\_from\_b} và cũng không lưu riêng \texttt{created\_at}; các thông tin này được quy về snapshot hoặc được xử lý ở tầng truy vấn, cache và API khi cần.
-
-\begin{table}[H]
-\centering
-\caption{Cấu trúc bảng \texttt{node\_correlations}}
-\begin{tabular}{|l|l|l|p{4cm}|}
-\hline
-\textbf{Cột} & \textbf{Kiểu dữ liệu} & \textbf{Ràng buộc} & \textbf{Mô tả} \\
-\hline
-\texttt{id} & UUID & PK & Định danh duy nhất \\
-\texttt{snapshot\_id} & UUID & FK $\to$ correlation\_snapshots & Snapshot tương quan mà bản ghi này thuộc về \\
+\texttt{snapshot\_id} & UUID & FK $\to$ correlation\_snapshots & Phiên bản correlation \\
 \texttt{node\_a\_id} & UUID & FK $\to$ nodes & Node thứ nhất \\
 \texttt{node\_b\_id} & UUID & FK $\to$ nodes & Node thứ hai \\
-\texttt{correlation\_value} & FLOAT & NOT NULL & Hệ số tương quan giữa hai node \\
-\texttt{is\_adjacent} & BOOLEAN & & Cho biết hai node có liền kề trong đồ thị hay không \\
+\texttt{correlation\_value} & FLOAT & NOT NULL & Hệ số tương quan [-1,1] \\
+\texttt{rank\_from\_a} & INTEGER & & Thứ hạng từ góc nhìn A \\
+\texttt{rank\_from\_b} & INTEGER & & Thứ hạng từ góc nhìn B \\
+\texttt{is\_adjacent} & BOOLEAN & DEFAULT FALSE & Có cạnh trực tiếp không \\
+\texttt{created\_at} & TIMESTAMP & NOT NULL & Thời điểm tạo bản ghi \\
 \hline
 \end{tabular}
 \end{table}
@@ -436,6 +404,21 @@ Khác với thiết kế cũ, bảng hiện tại không lưu các cột xếp h
 CREATE INDEX ON node_correlations (node_a_id, correlation_value DESC);
 CREATE INDEX ON node_correlations (node_b_id, correlation_value DESC);
 \end{verbatim}
+
+\paragraph{Bảng \texttt{node\_correlation\_cache}}
+Đây là bảng tối ưu hóa hiệu năng quan trọng nhất cho tính năng click-node. Thay vì query và join bảng \texttt{node\_correlations} mỗi lần người dùng click, hệ thống pre-aggregate sẵn top-20 láng giềng của mỗi node vào một JSONB blob và cache trong bảng này. Mỗi blob có dạng:
+
+\begin{verbatim}
+[
+  {"node_id": "uuid-...", "corr": 0.9979,
+   "lat": 10.7650, "lon": 106.6781, "rank": 1},
+  {"node_id": "uuid-...", "corr": 0.9975,
+   "lat": 10.7623, "lon": 106.6754, "rank": 2},
+  ...
+]
+\end{verbatim}
+
+Tổng kích thước cache cho 385 node ước tính $\sim$0.63 MB, đủ nhỏ để tải toàn bộ vào Redis-Corr khi khởi động. Khi người dùng click vào node X, Correlation Service chỉ cần một lệnh \texttt{GET} từ Redis, thời gian phản hồi dưới 1ms.
 
 \subsubsection{Chiến lược index và tối ưu hóa}
 
@@ -461,7 +444,7 @@ Ngoài các index đã đề cập, hệ thống áp dụng các chiến lược
  & \texttt{refresh\_tokens} & Quản lý refresh token \\
  & \texttt{user\_sessions} & Theo dõi phiên đăng nhập \\
 \hline
-\multirow{5}{*}{Road Graph} & \texttt{nodes} & Node giao lộ (OSM + PostGIS) \\
+\multirow{4}{*}{Road Graph} & \texttt{nodes} & Node giao lộ (OSM + PostGIS) \\
  & \texttt{edges} & Cạnh đường bộ có hướng \\
  & \texttt{tomtom\_segments} & Phân đoạn TomTom gốc \\
  & \texttt{segment\_edge\_mappings} & Kết quả map matching \\
@@ -480,63 +463,3 @@ Ngoài các index đã đề cập, hệ thống áp dụng các chiến lược
 \hline
 \end{tabular}
 \end{table}
-
-\newpage
-\subsection{Thiết kế giao diện}
-\subsubsection{Mục tiêu thiết kế}
-Để giao diện hệ thống đáp ứng tốt yêu cầu của bài toán phân tích tình trạng giao thông trong mạng lưới giao thông đô thị, quá trình thiết kế được xây dựng với một số mục tiêu trọng tâm như sau:
-
-Thứ nhất, giao diện phải đảm bảo tính trực quan và dễ tiếp cận. Dữ liệu giao thông thường có khối lượng lớn, biến động theo thời gian và gắn chặt với yếu tố không gian, do đó thông tin cần được thể hiện bằng những hình thức trực quan như bản đồ, biểu đồ và các chỉ số tổng hợp.
-
-Thứ hai, giao diện phải đảm bảo tính nhất quán trong cách trình bày. Các quy ước về màu sắc, biểu tượng, cách đặt tên chức năng, bố cục các vùng hiển thị và hành vi tương tác cần được sử dụng thống nhất trên toàn bộ hệ thống. Ví dụ, cùng một mức độ ùn tắc thì phải luôn được biểu diễn bằng cùng một nhóm màu ở tất cả các màn hình. 
-
-Thứ ba, hệ thống sẽ ưu tiên bản đồ làm phương tiện truyền đạt thông tin. Do bài toán nghiên cứu gắn với không gian đô thị, bản đồ là thành phần phản ánh trực tiếp nhất mối liên hệ giữa dữ liệu và vị trí thực tế. Từ bản đồ, người dùng có thể quan sát phân bố giao thông trên toàn thành phố, phát hiện các cụm ùn tắc và lựa chọn đối tượng để phân tích chi tiết. Các thành phần khác như bộ lọc, biểu đồ hay bảng thống kê nên đóng vai trò hỗ trợ cho bản đồ.
-
-Thứ tư, giao diện phải hỗ trợ tốt tương tác phân tích. Người dùng cần có khả năng lọc dữ liệu theo thời gian, khu vực, đối tượng và lớp thông tin hiển thị.
-
-Thứ năm, thiết kế giao diện phải đảm bảo tính tương thích với kiến trúc hệ thống và hiệu năng khai thác. Do dữ liệu được cung cấp từ nhiều dịch vụ backend khác nhau như dịch vụ giao thông, dịch vụ dự báo và dịch vụ tương quan, giao diện cần tổ chức sao cho việc tải dữ liệu, cập nhật trạng thái và hiển thị kết quả được diễn ra ổn định. 
-
-Cuối cùng, giao diện cần hướng tới khả năng mở rộng và bảo trì lâu dài. Kiến trúc giao diện phải cho phép bổ sung thêm các chức năng mới như cảnh báo sớm, so sánh dữ liệu nhiều thời điểm, hiển thị heatmap hoặc gợi ý phương án điều tiết giao thông mà không làm ảnh hưởng lớn đến bố cục và cách tổ chức hiện có.
-
-\subsubsection{Trang chủ}
-Đây là điểm vào đầu tiên của hệ thống, là màn hình sẽ xuất hiện khi người dùng truy cập. Mục đích của trang này là cung cấp cho người dùng một số thông tin cơ bản về trang web này. Cụ thể là giới thiệu ngắn gọn mục đích và một số chức năng chính.
-
-\subsubsection{Trang đăng nhập và đăng ký}
-
-Đây là hai trang thuộc nhóm giao diện xác thực người dùng của hệ thống. Hai trang này được thiết kế thống nhất về bố cục, màu sắc và cách tổ chức thành phần nhằm tạo trải nghiệm sử dụng liền mạch cho người dùng ngay từ bước đầu truy cập hệ thống.
-
-Màn hình đăng nhập cho phép người dùng đã có tài khoản thực hiện xác thực để truy cập vào các chức năng phân tích và theo dõi giao thông. Trong khi đó, màn hình đăng ký hỗ trợ người dùng mới tạo tài khoản bằng cách cung cấp các thông tin cơ bản như email, mật khẩu và xác nhận mật khẩu. Việc thiết kế đồng bộ hai màn hình này giúp hệ thống đảm bảo đầy đủ luồng xác thực, từ khởi tạo tài khoản cho đến đăng nhập và sử dụng dịch vụ.
-
-Đối với màn hình đăng ký, giao diện cần hỗ trợ kiểm tra tính hợp lệ của dữ liệu đầu vào nhằm hạn chế lỗi trong quá trình tạo tài khoản. Các thông báo phản hồi như thiếu thông tin, sai định dạng email, mật khẩu không đạt yêu cầu hoặc tài khoản đã tồn tại cần được hiển thị rõ ràng và trực tiếp trên giao diện. 
-Sau khi đăng ký thành công, người dùng được điều hướng về màn hình đăng nhập để tiếp tục truy cập hệ thống.
-
-Việc xây dựng đầy đủ nhóm giao diện đăng nhập và đăng ký không chỉ nâng cao tính hoàn chỉnh của hệ thống mà còn phù hợp với định hướng triển khai thực tế, nơi người dùng có thể chủ động tạo tài khoản và sử dụng các chức năng của nền tảng phân tích giao thông.
-
-\subsubsection{Trang dữ liệu giao thông}
-Trang này có chức năng hiển thị trực quan cũng như thống kê dữ liệu giao thông (sau khi đã tiền xử lý). Nó bao gồm hai giao diện con là giao diện bản đồ dữ liệu và giao diện thống kê dữ liệu. Hai giao diện này có thể được chuyển đổi qua lại thông qua một thanh điều hướng dọc ở bên trái giao diện.
-
-Ở chế độ bản đồ dữ liệu, hệ thống hiển thị các điểm dữ liệu giao thông trên nền bản đồ số, giúp người dùng nhận biết vị trí địa lý của các nút giao, đoạn đường hoặc khu vực có dữ liệu giao thông tương ứng. 
-Thông qua màu sắc, ký hiệu hoặc các lớp hiển thị, giao diện cho phép thể hiện các thuộc tính như tốc độ trung bình, mức độ ùn tắc tại từng vị trí trong mạng lưới. 
-
-Ở chế độ thống kê dữ liệu, hệ thống cung cấp các biểu đồ, bảng số liệu và chỉ số tổng hợp nhằm phản ánh đặc trưng của tập dữ liệu giao thông theo thời gian hoặc theo khu vực. 
-Người dùng có thể quan sát các xu hướng biến động, so sánh các mốc thời gian khác nhau, cũng như nhận diện các giai đoạn hoặc khu vực có dấu hiệu bất thường.
-
-\subsubsection{Trang phân tích tương quan}
-
-Trang phân tích tương quan được xây dựng nhằm hỗ trợ người dùng khám phá mối liên hệ giữa các đoạn đường trong mạng lưới giao thông đô thị. Đây chính là trọng tâm, mục tiêu chính mà trang web hướng tới. Trang này giúp người dùng đánh giá hiện tượng lan truyền ùn tắc và mức độ ảnh hưởng qua lại trong mạng lưới.
-
-Về chức năng, trang phân tích tương quan cho phép người dùng lựa chọn một đoạn đường mong muốn làm đối tượng phân tích. 
-Việc lựa chọn có thể được thực hiện thông qua công cụ tìm kiếm theo tên tuyến đường, mã đoạn đường. Sau khi người dùng xác nhận lựa chọn, hệ thống sẽ hiển thị vị trí địa lí của đoạn đường đó lên bản đồ (ngay dưới thanh tìm kiếm) rồi gửi yêu cầu tới dịch vụ phân tích tương quan ở phía backend để thực hiện tính toán trên tập dữ liệu giao thông liên quan. Kết quả trả về được biểu diễn dưới dạng ma trận tương quan, phản ánh mức độ liên hệ giữa các đoạn đường trong tập phân tích.
-
-Giao diện trang này có thể chia thành hai khu vực chính. Khu vực thứ nhất là vùng lựa chọn dữ liệu, nơi người dùng xác định đoạn đường cần phân tích. Khu vực thứ hai là vùng hiển thị kết quả, trong đó ma trận tương quan được thể hiện bằng bảng hoặc heatmap màu để người dùng dễ dàng nhận biết các cặp đoạn đường có mức tương quan cao, trung bình hoặc thấp. 
-
-\subsubsection{Trang dự đoán lan truyền ùn tắc}
-
-Trang dự đoán lan truyền ùn tắc được xây dựng nhằm hỗ trợ người dùng đánh giá khả năng ảnh hưởng của một điểm ùn tắc ban đầu lên các đoạn đường khác trong mạng lưới giao thông. 
-
-Về chức năng, trang này cho phép người dùng lựa chọn một đoạn đường làm điểm khởi phát của tình huống ùn tắc giả định hoặc tình huống đang được quan tâm. 
-Việc lựa chọn có thể được thực hiện thông qua ô tìm kiếm hoặc qua danh sách các đoạn đường trong khu vực nghiên cứu. 
-Sau khi người dùng xác nhận đoạn đường cần phân tích, hệ thống sẽ hiển thị vị trí địa lí của đoạn đường đó lên bản đồ (ngay dưới thanh tìm kiếm) rồi gửi yêu cầu đến dịch vụ dự đoán ở phía backend để khai thác mô hình đã huấn luyện và thực hiện suy luận trên dữ liệu hiện có. Kết quả trả về cho biết những đoạn đường nào có khả năng bị ảnh hưởng, mức độ ảnh hưởng tương ứng và thứ tự lan truyền dự kiến trong mạng lưới giao thông.
-
-Về giao diện, trang dự đoán lan truyền ùn tắc có thể được chia thành ba khu vực chính. Khu vực thứ nhất là vùng lựa chọn dữ liệu đầu vào, nơi người dùng xác định đoạn đường cần xét hoặc các tham số liên quan nếu hệ thống cho phép cấu hình thêm. Khu vực thứ hai là vùng hiển thị bản đồ, dùng để trực quan hóa đoạn đường khởi phát và các đoạn đường có khả năng chịu tác động lan truyền. Khu vực thứ ba là vùng kết quả chi tiết, hiển thị danh sách các đoạn đường bị ảnh hưởng, xác suất hoặc mức độ nguy cơ, cùng với các thông tin bổ trợ như thứ tự lan truyền hoặc khoảng thời gian dự kiến xuất hiện ảnh hưởng.
-
